@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guía de la materia: Herramientas para la Gestión Internacional</title>
+<meta name="description" content="Guía para el segundo parcial de Herramientas para la Gestión Internacional: fichas para aprender desde cero, práctica con corrección inmediata y examen de 30 preguntas sobre 10.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Caveat:wght@600&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Idea de diseño: la guía se ve como el pizarrón del salón. Fondo de vidrio verde, tinta azul de marcador
+   solo en los apuntes del profesor; el resto es texto sobrio para leer y estudiar. */
+:root{
+  --bg:#E4EEE9; --surface:#FAFCFB; --ink:#14201C; --muted:#4D5D57; --line:#C2D3CB;
+  --blue:#1D3FA6; --blue-soft:#DAE3F6;
+  --board:#D3E6DD; --board-line:#97B8AA;
+  --ok:#17663F; --ok-bg:#D6EEE0; --bad:#9E2A21; --bad-bg:#F8DDD9; --warn:#744D00; --warn-bg:#F5E6C4;
+  --font-body:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-head:'Bricolage Grotesque','Figtree',system-ui,sans-serif;
+  --font-hand:'Caveat','Segoe Print','Bradley Hand',cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1815; --surface:#15231F; --ink:#E5EEE9; --muted:#A2B4AC; --line:#2A3E36;
+  --blue:#93AEF5; --blue-soft:#1B2949; --board:#1C352E; --board-line:#3E6A5B;
+  --ok:#7FD6A3; --ok-bg:#12372A; --bad:#F29B93; --bad-bg:#3E1C19; --warn:#E6C16A; --warn-bg:#392C0D; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1815; --surface:#15231F; --ink:#E5EEE9; --muted:#A2B4AC; --line:#2A3E36;
+  --blue:#93AEF5; --blue-soft:#1B2949; --board:#1C352E; --board-line:#3E6A5B;
+  --ok:#7FD6A3; --ok-bg:#12372A; --bad:#F29B93; --bad-bg:#3E1C19; --warn:#E6C16A; --warn-bg:#392C0D; color-scheme:dark}
+*{box-sizing:border-box}
+html{color-scheme:light}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:56px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:4px}
+.wrap{max-width:760px;margin-inline:auto}
+h1,h2,h3,h4{font-family:var(--font-head);margin:0;text-wrap:balance;line-height:1.2}
+
+/* Encabezado */
+.hero{padding-block:28px 18px;display:flex;flex-direction:column;gap:12px}
+.hero h1{font-size:clamp(32px,7vw,46px);font-weight:700;letter-spacing:-.01em}
+.hero .sub{margin:0;color:var(--muted);max-width:58ch}
+.prog{display:flex;flex-direction:column;gap:6px;margin-top:6px;font-size:15px;color:var(--muted)}
+.prog b{color:var(--ink)}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--blue);transition:width .25s}
+
+/* Pestañas */
+.tabs{position:sticky;top:0;z-index:5;display:flex;gap:6px;padding:10px 0;background:var(--bg);border-bottom:1px solid var(--line)}
+.tab{flex:1;padding:11px 8px;border:2px solid transparent;border-radius:10px;background:transparent;font-weight:700;color:var(--muted)}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--blue);color:#fff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tab[aria-selected="true"]{color:#0E1815}}
+:root[data-theme="dark"] .tab[aria-selected="true"]{color:#0E1815}
+.panel{padding-top:22px;display:flex;flex-direction:column;gap:18px}
+.lead{margin:0;color:var(--muted);max-width:62ch}
+
+/* Aprender: ruta de fichas, la secuencia sí importa */
+.group{display:flex;flex-direction:column;gap:6px}
+.group h2{font-size:22px;margin-top:10px}
+.path{list-style:none;margin:0;padding:0;border-left:3px solid var(--line);margin-left:15px;display:flex;flex-direction:column;gap:8px}
+.path>li{position:relative;padding-left:26px}
+.ficha{background:transparent;border:1px solid transparent;border-radius:12px}
+.ficha[open]{background:var(--surface);border-color:var(--line)}
+.ficha summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:12px 14px;border-radius:12px}
+.ficha summary::-webkit-details-marker{display:none}
+.ficha summary:hover{background:var(--surface)}
+.ficha .num{position:absolute;left:-17px;top:11px;width:31px;height:31px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-head);font-weight:700;font-size:15px;background:var(--bg);border:2px solid var(--line);color:var(--muted)}
+.ficha.done .num{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.ficha .t{font-family:var(--font-head);font-weight:600;font-size:19px;line-height:1.25}
+.ficha .i{grid-column:1/2;color:var(--muted);font-size:15.5px}
+.ficha .chev{grid-column:2/3;grid-row:1/3;align-self:center;color:var(--muted);transition:transform .2s;font-size:20px}
+.ficha[open] .chev{transform:rotate(90deg)}
+.fbody{padding:4px 16px 18px;display:flex;flex-direction:column;gap:14px}
+.fbody p{margin:0;max-width:66ch}
+.fbody h4{font-size:17px;margin-top:4px}
+.fbody ul,.fbody ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:5px;max-width:66ch}
+.formula{font-family:var(--font-head);font-weight:600;font-size:19px;background:var(--blue-soft);color:var(--blue);padding:12px 14px;border-radius:8px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px}
+th,td{padding:9px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--blue-soft);color:var(--blue);font-family:var(--font-head);font-weight:600}
+tbody tr:last-child td{border-bottom:0}
+tbody th{background:transparent;color:var(--ink)}
+
+/* Lo memorable: el recuadro de pizarrón con tinta de marcador */
+.pizarron{background:var(--board);border:2px solid var(--board-line);border-radius:6px;padding:12px 16px 14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+.pizarron div{font-family:var(--font-hand);font-weight:600;font-size:24px;line-height:1.25;color:var(--blue)}
+.ojo{background:var(--warn-bg);color:var(--ink);border-left:5px solid var(--warn);padding:11px 14px;border-radius:6px;max-width:66ch}
+.ojo strong{color:var(--warn)}
+.nuevo{background:var(--blue-soft);border-left:5px solid var(--blue);padding:11px 14px;border-radius:6px;max-width:66ch}
+.explica{border:1px dashed var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.explica p{margin:0}
+.answer{background:var(--ok-bg);padding:10px 12px;border-radius:8px}
+.btn{align-self:flex-start;border:2px solid var(--blue);background:transparent;color:var(--blue);border-radius:10px;padding:9px 16px;font-weight:700}
+.btn:hover{background:var(--blue-soft)}
+.btn.primary{background:var(--blue);color:#fff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#0E1815}}
+:root[data-theme="dark"] .btn.primary{color:#0E1815}
+.btn.primary:hover{filter:brightness(1.08)}
+.fbtns{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+/* Practicar y examen */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 14px;font-weight:600;font-size:15px}
+.chip[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft);color:var(--blue)}
+.meter{display:flex;flex-direction:column;gap:8px}
+.meta{display:flex;justify-content:space-between;gap:12px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.meta b{color:var(--ink)}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:16px}
+.qtag{align-self:flex-start;font-size:14px;font-weight:600;color:var(--blue);background:var(--blue-soft);padding:3px 10px;border-radius:6px}
+.q{font-size:21px;font-weight:600;line-height:1.35}
+.opts{display:flex;flex-direction:column;gap:10px;padding:0;margin:0;list-style:none}
+.opt{width:100%;display:flex;gap:14px;align-items:flex-start;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:12px 14px}
+.opt:hover:not(:disabled){border-color:var(--blue);background:var(--blue-soft)}
+.opt .k{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;border:1.5px solid var(--line);color:var(--muted)}
+.opt .x{flex:1;min-width:0;overflow-wrap:anywhere}
+.opt .tag{flex:none;font-size:14px;font-weight:700;align-self:center}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-bg)}
+.opt.ok .k{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.opt.ok .tag{color:var(--ok)}
+.opt.bad{border-color:var(--bad);background:var(--bad-bg)}
+.opt.bad .k{background:var(--bad);border-color:var(--bad);color:var(--surface)}
+.opt.bad .tag{color:var(--bad)}
+.opt.dim{opacity:.6}
+.fb{border-radius:10px;padding:13px 16px;display:flex;flex-direction:column;gap:6px}
+.fb.ok{background:var(--ok-bg)}
+.fb.bad{background:var(--bad-bg)}
+.fb strong{font-size:16px}
+.fb.ok strong{color:var(--ok)}
+.fb.bad strong{color:var(--bad)}
+.fb p{margin:0;font-size:16px}
+.fb .repasa{align-self:flex-start;background:none;border:0;padding:0;color:var(--blue);font-weight:700;text-decoration:underline}
+.next{align-self:flex-end}
+.hint{margin:0;font-size:13.5px;color:var(--muted)}
+.score{font-family:var(--font-head);font-size:64px;font-weight:700;line-height:1}
+.score small{font-size:26px;color:var(--muted);font-weight:600}
+.bymod{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+.bymod div{background:var(--blue-soft);border-radius:8px;padding:8px 12px;font-size:15px;display:flex;justify-content:space-between;gap:8px}
+.miss{display:flex;flex-direction:column;gap:12px;padding:0;margin:0;list-style:none}
+.miss li{border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;font-size:15.5px}
+.miss .mq{font-weight:600}
+.miss .you{color:var(--bad)}
+.miss .right{color:var(--ok)}
+.hist{margin:0;padding-left:20px;color:var(--muted);font-size:15px}
+.src{border-top:1px solid var(--line);margin-top:34px;padding-top:18px;font-size:14.5px;color:var(--muted)}
+.src h2{font-size:18px;color:var(--ink);margin-bottom:8px}
+.src ul{margin:0 0 10px;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.src a{color:var(--blue)}
+.reset{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;font-size:14px}
+@media (max-width:480px){.qcard{padding:16px}.q{font-size:19px}.pizarron div{font-size:22px}}
+@media (prefers-reduced-motion:reduce){.bar i,.ficha .chev{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>Guía de la materia</h1>
+    <p class="sub">Herramientas para la Gestión Internacional. Todo lo del segundo parcial en orden: primero aprendes, luego practicas y al final haces el examen.</p>
+    <div class="prog" aria-live="polite">
+      <span id="progText"></span>
+      <div class="bar"><i id="progBar"></i></div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Secciones de la guía">
+    <button class="tab" role="tab" id="tab-aprender" aria-controls="p-aprender" aria-selected="true" type="button">Aprender</button>
+    <button class="tab" role="tab" id="tab-practicar" aria-controls="p-practicar" aria-selected="false" type="button">Practicar</button>
+    <button class="tab" role="tab" id="tab-examen" aria-controls="p-examen" aria-selected="false" type="button">Examen</button>
+  </nav>
+
+  <main>
+    <section class="panel" id="p-aprender" role="tabpanel" aria-labelledby="tab-aprender"></section>
+    <section class="panel" id="p-practicar" role="tabpanel" aria-labelledby="tab-practicar" hidden></section>
+    <section class="panel" id="p-examen" role="tabpanel" aria-labelledby="tab-examen" hidden></section>
+  </main>
+
+  <footer class="src">
+    <h2>De dónde sale lo que estudias</h2>
+    <p>Material del curso: programa de la asignatura (clave PILE0401E), pizarrón del profesor para la Unidad 4, Actividad 6 (texto argumentativo) y Actividad 7 (proyecto integrador, etapa 2). Datos verificados en fuentes oficiales, consultadas el 8 de noviembre de 2026:</p>
+    <ul>
+      <li>Suprema Corte de Justicia de la Nación. <a href="https://www.scjn.gob.mx/sites/default/files/cpeum/documento/CPEUM-025_0.pdf" target="_blank" rel="noopener">Constitución Política, artículo 25</a>.</li>
+      <li>Diario Oficial de la Federación (17 de marzo de 2025). <a href="https://www.diputados.gob.mx/LeyesBiblio/ref/dof/CPEUM_ref_272_17mar25.pdf" target="_blank" rel="noopener">Reforma constitucional sobre maíz genéticamente modificado</a>.</li>
+      <li>Organización Mundial del Comercio. <a href="https://www.wto.org/english/res_e/publications_e/ai17_e/gatt1994_art24_gatt47.pdf" target="_blank" rel="noopener">GATT, artículo XXIV</a>.</li>
+      <li>Gobierno de Canadá. <a href="https://www.international.gc.ca/trade-commerce/trade-agreements-accords-commerciaux/agr-acc/cusma-aceum/text-texte/32.aspx?lang=eng" target="_blank" rel="noopener">T-MEC (CUSMA), capítulo 32, artículo 32.10</a>.</li>
+      <li>Consejo Coordinador Empresarial (julio de 2026). <a href="https://saladeprensa.cce.org.mx/wp-content/uploads/2026/07/VF-Comunicado-No.-15-T-MEC.pdf" target="_blank" rel="noopener">Comunicado No. 15 sobre la revisión conjunta del T-MEC</a>.</li>
+      <li>International Institute for Sustainable Development. <a href="https://www.iisd.org/itn/es/?p=17582" target="_blank" rel="noopener">Estados Unidos no acepta renovar el T-MEC en la primera revisión conjunta</a>.</li>
+      <li>Fondo Monetario Internacional. <a href="https://www.imf.org/en/countries/can" target="_blank" rel="noopener">Canadá y el FMI</a>.</li>
+    </ul>
+    <p>Las partes que dicen «según tu proyecto» o «según tus apuntes» vienen del material del curso y no se verificaron aparte. Hecho por David Callejas para estudiar en la UVM. <button class="reset" id="btnReset" type="button">Borrar mi progreso</button></p>
+  </footer>
+</div>
+<noscript><p style="padding:16px">Esta guía necesita JavaScript para funcionar.</p></noscript>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- Contenido: fichas ---------- */
+var U4="Unidad 4. Sistemas económicos";
+var U5="Unidad 5. Integración económica internacional";
+var UP="Proyecto integrador y conceptos de apoyo";
+
+var F=[
+{u:U4,t:"Las tres preguntas de todo sistema económico",i:"Un sistema económico es la forma en que una sociedad decide qué, cómo y para quién producir.",
+ b:[["p","Los recursos son escasos y las necesidades no. Por eso toda sociedad tiene que resolver tres preguntas. Lo que cambia entre un sistema y otro es quién responde: el mercado, una autoridad o una combinación de ambos."],
+    ["ul",["Qué: qué bienes y servicios se producen, por ejemplo maíz o autos.","Cómo: con qué recursos, tecnología y organización.","Para quién: cómo se reparte lo producido, ya sea por precios, por decisión del Estado o por ambos."]]],
+ pz:["Sistema económico","Qué","Cómo","Para quién"],
+ ojo:"El examen no pregunta cuál sistema es el mejor. Pregunta quién decide en cada uno y qué ventajas y desventajas tiene.",
+ ex:{q:"Explica con tus palabras por qué los tres sistemas responden las mismas tres preguntas.",a:"Porque la escasez obliga a elegir en cualquier sociedad. Lo que los distingue es quién decide: los precios y la competencia (mercado), una autoridad central (dirigida) o los dos (mixta)."}},
+
+{u:U4,t:"Economía de mercado (4.1)",i:"Los precios nacen de la oferta y la demanda, y el Estado interviene poco.",
+ b:[["p","En una economía de mercado las empresas y las personas deciden qué producir y qué comprar. El precio sale del encuentro entre oferta y demanda. Se asocia con Adam Smith y Milton Friedman."],
+    ["h","Características"],["ul",["Propiedad privada de los medios de producción.","Libertad de empresa y de contratación.","Motivación por beneficio.","Competencia, que en el modelo ideal es perfecta.","Limitaciones a la intervención del Estado."]],
+    ["h","Ventajas"],["ul",["Alta eficiencia.","Incentivos a la innovación.","Respuesta rápida a los cambios."]],
+    ["h","Desventajas"],["ul",["Genera desigualdad.","Tiende a la concentración en pocas empresas, como monopolios u oligopolios."]]],
+ pz:["Mercado: oferta y demanda","Adam Smith, Milton Friedman","Ventajas: eficiencia, innovación, rapidez","Desventajas: desigualdad, concentración"],
+ ojo:"La competencia perfecta es el modelo teórico. En la práctica, la tendencia a concentrarse es justamente una de sus desventajas.",
+ ex:{q:"Menciona dos ventajas y dos desventajas de la economía de mercado.",a:"Ventajas: alta eficiencia, incentivos a la innovación y respuesta rápida (basta con dos). Desventajas: genera desigualdad y tiende a la concentración."}},
+
+{u:U4,t:"Economía dirigida o planificada (4.2)",i:"Una autoridad central decide qué, cómo y para quién producir.",
+ b:[["p","En la economía dirigida el Estado es dueño de los medios de producción y planifica de forma central. En clase se vio con el socialismo y la URSS como caso histórico, y con los autores Marx, Lenin, Mises y Hayek. Mises y Hayek son críticos: sostienen que una autoridad central no puede coordinar la economía sin la información que dan los precios."],
+    ["h","Características"],["ul",["Propiedad estatal.","Planificación central.","Escasa innovación."]],
+    ["h","Ventajas"],["ul",["Posibilidad de dirigir los recursos hacia las metas del Estado.","Capacidad de alto empleo.","Reducción de desigualdades."]],
+    ["h","Desventajas"],["ul",["Problemas de información.","Rigidez adaptativa: le cuesta ajustarse a los cambios.","Baja calidad."]]],
+ pz:["Dirigida o planificada","Una autoridad decide","Propiedad estatal","Planificación central","Marx, Lenin, Mises y Hayek"],
+ ojo:"Escasa innovación es rasgo de la dirigida. Alta eficiencia e incentivos a la innovación son ventajas del mercado. No las cruces.",
+ ex:{q:"¿Por qué la planificación central tiene problemas de información?",a:"Porque una sola autoridad tendría que conocer y coordinar millones de decisiones, sin los precios que en el mercado transmiten qué se necesita y qué escasea. Esa es la crítica de Mises y Hayek."}},
+
+{u:U4,t:"Economía mixta (4.3) y el caso de México",i:"Conviven la iniciativa privada y la pública; el Estado regula y provee servicios.",
+ b:[["p","En la economía mixta coexisten la iniciativa privada y la pública. Hay propiedad privada e iniciativa individual, pero el Estado regula, por ejemplo la asignación de precios, y provee servicios públicos. En el pizarrón quedó anotado que el nivel de interacción internacional varía de un país a otro."],
+    ["p","México se analiza como economía mixta. El artículo 25 de la Constitución dice que el Estado es rector del desarrollo nacional y que en él concurren los sectores público, social y privado. Las áreas estratégicas del artículo 28 corresponden de forma exclusiva al sector público."],
+    ["h","Ventajas"],["ul",["Flexibilidad.","Reduce la desigualdad.","Capacidad de respuesta ante crisis, con estímulo fiscal."]],
+    ["h","Desventajas"],["ul",["Riesgo de burocracia.","Conflicto de intereses.","Dependencia de la calidad de la intervención y de los servicios del Estado."]],
+    ["h","Ejemplos de México, según tus apuntes"],["ul",["IMSS e ISSSTE: salud pública.","CONASAMI: fija el salario mínimo como piso legal.","PEMEX y CFE: participación estatal en sectores estratégicos.","Competencia privada: Volaris y Viva, Mercado Libre y Kavak."]]],
+ pz:["Mixta: coexiste lo privado y lo público","El mercado decide, el Estado regula","Ventajas: flexibilidad, respuesta a crisis","Desventajas: burocracia, conflicto de intereses"],
+ ojo:"Estímulo fiscal es la herramienta con la que la economía mixta responde a una crisis. Si lo ves en una pregunta, piensa en mixta.",
+ ex:{q:"¿Qué dice el artículo 25 constitucional sobre quién participa en la economía de México?",a:"Que el Estado rige el desarrollo nacional y que concurren, con responsabilidad social, los sectores público, social y privado. Las áreas estratégicas del artículo 28 quedan en exclusiva al sector público."}},
+
+{u:U4,t:"Los tres sistemas lado a lado",i:"Una tabla para comparar y no confundir ventajas con desventajas.",
+ b:[["t",{head:["","Mercado","Dirigida o planificada","Mixta"],rows:[
+   ["Quién decide","Oferta y demanda","Una autoridad central","Mercado y Estado"],
+   ["Propiedad","Privada","Estatal","Privada y pública"],
+   ["Autores","Adam Smith, Milton Friedman","Marx, Lenin; críticos: Mises y Hayek","Se analiza con el caso de México"],
+   ["Ventajas","Eficiencia, innovación, respuesta rápida","Alto empleo, menos desigualdad, recursos dirigidos a metas","Flexibilidad, menos desigualdad, respuesta a crisis"],
+   ["Desventajas","Desigualdad, concentración","Problemas de información, rigidez, baja calidad","Burocracia, conflicto de intereses, dependencia de la calidad"]]}],
+    ["p","Truco para el examen: si la pregunta habla de incentivos a la innovación, es mercado. Si habla de planificación central o propiedad estatal, es dirigida. Si habla de regulación, servicios públicos o estímulo fiscal, es mixta."]],
+ pz:null,
+ ojo:"Las desventajas de un sistema suelen aparecer como distractores en las ventajas de otro. Lee con calma el nombre del sistema antes de elegir.",
+ ex:{q:"Sin mirar la tabla: ¿qué sistema tiene como desventaja la burocracia y el conflicto de intereses?",a:"La economía mixta."}},
+
+{u:U4,t:"Economía internacional (4.4): comercio, aranceles y el caso del maíz",i:"El comercio entre países se apoya en la ventaja comparativa y los aranceles encarecen lo importado.",
+ b:[["p","En el pizarrón, el tema 4.4 quedó solo como título. El caso que trabajaste en clase es el del maíz. El blanco se destina sobre todo a consumo humano, como las tortillas, y México es autosuficiente. El amarillo se usa sobre todo en alimentación animal e industria, y México depende más de importaciones. Todo esto es según tus apuntes."],
+    ["p","La propuesta del caso es comercio abierto con arancel cero y subsidios focalizados a la productividad, como riego y tecnología para pequeños productores. Se apoya en la ventaja comparativa de David Ricardo."],
+    ["p","Un arancel es un impuesto a la importación. Eleva el precio del bien importado y ese costo puede pasar a consumidores y empresas. El efecto exacto depende del mercado y del diseño de la medida."]],
+ nuevo:"Actualización normativa verificada: la reforma constitucional publicada el 17 de marzo de 2025 prohíbe sembrar maíz genéticamente modificado en México. Los demás usos no se prohíben de golpe: deben evaluarse conforme a las leyes aplicables para confirmar que no ponen en riesgo la bioseguridad, la salud ni el patrimonio biocultural. Cambiaron los artículos 4 y 27.",
+ pz:["Maíz blanco: consumo humano","Maíz amarillo: pecuario e industrial","Arancel: encarece lo importado"],
+ ojo:"No simplifiques a «todo maíz transgénico está prohibido». Distingue siembra, importación y uso para alimentación.",
+ ex:{q:"¿Qué prohíbe la reforma constitucional de 2025 sobre el maíz transgénico y qué no prohíbe?",a:"Prohíbe sembrarlo, es decir, su cultivo. Los otros usos no se prohíben de manera automática: se evalúan conforme a las leyes aplicables."}},
+
+{u:U5,t:"Integración económica: la pirámide de seis niveles",i:"Cada nivel incluye al anterior y le añade algo.",
+ b:[["p","La integración económica es el proceso por el cual varios países unen sus economías de forma progresiva para reducir o eliminar barreras comerciales. De menor a mayor profundidad:"],
+    ["ol",["Acuerdo preferencial: reducción parcial y mutua de aranceles en ciertos productos.","Zona de libre comercio (ZLC): se eliminan aranceles y barreras entre los miembros, pero cada país conserva su propia política arancelaria frente a terceros. Ejemplo: el T-MEC.","Unión aduanera: se añade un arancel externo común (AEC). Ejemplos: la Unión Europea y el Mercosur.","Mercado común: se añade la libre circulación de factores de producción, es decir, capital y trabajo.","Unión económica y monetaria: se añade la armonización de políticas económicas y la moneda única. Ejemplo clásico: la eurozona.","Integración económica total: unificación completa de las políticas económicas, fiscales y monetarias, con una autoridad política común."]],
+    ["p","Frase para memorizar en voz alta: preferir, liberar, un arancel común, mover factores, una moneda, un gobierno."]],
+ pz:["1 Acuerdo preferencial","2 ZLC","3 Unión aduanera = AEC","4 Mercado común = factores","5 Unión económica y monetaria","6 Integración total"],
+ ojo:"El T-MEC está en el nivel 2. Si una pregunta menciona arancel externo común, ya subiste al nivel 3.",
+ ex:{q:"Di los seis niveles en orden y qué añade cada uno.",a:"Acuerdo preferencial (reducción parcial), ZLC (eliminación de aranceles internos), unión aduanera (+ arancel externo común), mercado común (+ libre circulación de factores), unión económica y monetaria (+ políticas armonizadas y moneda única), integración total (+ autoridad política común)."}},
+
+{u:U5,t:"Zona de libre comercio frente a unión aduanera",i:"La diferencia está en lo que cada país hace frente a terceros.",
+ b:[["t",{head:["","Zona de libre comercio","Unión aduanera"],rows:[
+   ["Entre miembros","Se eliminan aranceles y barreras en lo sustancial del comercio","Igual"],
+   ["Frente a terceros","Cada país mantiene su propio arancel y política comercial","Arancel externo común"],
+   ["Tratados con otros países","Cada país los negocia por su cuenta","Los negocia un órgano común"],
+   ["Ejemplos","T-MEC, TIPAT, TLCUEM","Unión Europea, Mercosur"]]}],
+    ["p","El artículo XXIV, párrafo 8, del GATT define ambas figuras. En las dos se eliminan aranceles y otras regulaciones restrictivas en lo sustancial del comercio entre los miembros. La unión aduanera además aplica sustancialmente los mismos aranceles y reglas a los demás países; en la zona de libre comercio cada miembro conserva su propio régimen."],
+    ["p","Ejemplos de tu trabajo: México aplica a bienes de China, Brasil o la India un arancel distinto del de EE. UU. Francia y Alemania, en cambio, no pueden firmar un TLC por su cuenta con México, porque lo negocia la Comisión Europea."]],
+ pz:["ZLC: cada quien su arancel","Unión aduanera: un arancel común"],
+ ojo:"Un auto fabricado en China no se vuelve originario del T-MEC solo por importarse a México. Para entrar con preferencia a EE. UU. debe cumplir las reglas de origen. En una unión aduanera hipotética, en cambio, un bien de un tercer país pagaría el arancel externo común al entrar y podría circular dentro.",
+ ex:{q:"¿Por qué el T-MEC no es una unión aduanera?",a:"Porque no tiene arancel externo común: cada país fija sus aranceles frente a terceros y puede firmar acuerdos por su cuenta, con los límites del tratado. Tampoco hay un órgano supranacional que negocie por los tres."}},
+
+{u:U5,t:"T-MEC: qué es y qué lo define",i:"El T-MEC es una zona de libre comercio, no una unión aduanera.",
+ b:[["p","El Tratado entre México, Estados Unidos y Canadá entró en vigor el 1 de julio de 2020 y sustituyó al TLCAN. Se eliminan o reducen aranceles entre los tres países, pero cada uno conserva sus leyes, sus políticas económicas y sus aranceles frente a terceros."],
+    ["h","Características que usó tu equipo"],
+    ["ul",["Eliminación de aranceles para productos que cumplen las reglas del tratado.","Libre comercio de mercancías.","Reglas de origen.","Facilidad para hacer negocios.","Mayor inversión extranjera.","Competencia económica.","Cada país conserva su soberanía.","Cooperación y solución de controversias."]],
+    ["p","No hay arancel externo común, ni un órgano supranacional que negocie por los tres, ni moneda única."]],
+ pz:["T-MEC = zona de libre comercio","1 de julio de 2020, sustituye al TLCAN","Sin AEC y sin moneda única"],
+ ojo:"El nombre oficial es Tratado entre México, Estados Unidos y Canadá. No lo describas como unión aduanera ni como mercado común.",
+ ex:{q:"Menciona tres características que identifican al T-MEC como zona de libre comercio.",a:"Por ejemplo: elimina aranceles entre los socios para productos que cumplen las reglas de origen, cada país conserva su arancel frente a terceros y no hay arancel externo común ni moneda única."}},
+
+{u:U5,t:"Reglas de origen y arancel efectivo",i:"La preferencia solo aplica a productos que califican como originarios.",
+ b:[["p","Las reglas de origen determinan si un producto califica como originario del tratado y puede usar la preferencia arancelaria. Sirven para impedir que un tercer país entre al mercado de la zona por la puerta de otro, algo que se llama triangulación."],
+    ["f","Arancel efectivo = arancel NMF × (1 − margen de preferencia)"],
+    ["p","Ejemplo: con arancel NMF de 20% y margen de preferencia de 75%, el arancel efectivo es 20% × (1 − 0.75) = 20% × 0.25 = 5%."],
+    ["ol",["Escribe la fórmula.","Resta el margen a 1: 1 − 0.75 = 0.25.","Multiplica por el arancel NMF: 20% × 0.25.","Resultado: pagas 5%."]],
+    ["p","Una preferencia porcentual es un margen de reducción sobre el arancel NMF. Un gravamen preferencial acordado es una tasa preferencial fija. El Sistema Generalizado de Preferencias (SGP) es no recíproco: el país que lo otorga concede el trato sin exigir una concesión equivalente."]],
+ pz:["Efectivo = NMF × (1 − pref.)","20% × 0.25 = 5%"],
+ ojo:"Un margen de preferencia de 75% no significa que pagues 75%. Pagas el 25% restante del arancel NMF.",
+ ex:{q:"Arancel NMF de 40% y margen de preferencia de 50%. ¿Cuánto pagas?",a:"40% × (1 − 0.5) = 20%."}},
+
+{u:U5,t:"Los límites del T-MEC: lo que no puede hacer cada país",i:"Cada país conserva su política comercial, pero el tratado pone candados para proteger la integración.",
+ b:[["ul",["Trato nacional y nación más favorecida: no se pueden imponer aranceles discrecionales ni barreras injustificadas a las mercancías originarias de los socios.","Artículo 32.10, economías de no mercado: un país debe avisar a sus socios al menos 3 meses antes de iniciar negociaciones de un TLC con una economía de no mercado (el ejemplo de tu trabajo es China) y darles el texto completo al menos 30 días antes de firmar. Si lo firma, los otros socios pueden terminar el T-MEC con 6 meses de aviso y sustituirlo por un acuerdo bilateral entre ellos.","Solución de controversias, capítulo 31: si una medida infringe los compromisos del tratado, los socios pueden llevar el caso a un panel arbitral. Las represalias no son automáticas ante cualquier desacuerdo.","Capítulo 7, administración aduanera y facilitación del comercio: en lugar de unificar aranceles, el T-MEC facilita trámites y cooperación aduanera."]]],
+ pz:["32.10: avisar 3 meses antes","Terminar con 6 meses de aviso","Capítulo 7: aduanas","Capítulo 31: controversias"],
+ ojo:"La libertad de firmar acuerdos con otros países no es total. El artículo 32.10 es el límite que más se cita.",
+ ex:{q:"Explica qué dispone el artículo 32.10 del T-MEC.",a:"Si un país quiere negociar un TLC con una economía de no mercado, debe avisar a sus socios al menos 3 meses antes. Si lo firma, los otros pueden terminar el T-MEC con 6 meses de aviso y sustituirlo por un acuerdo bilateral."}},
+
+{u:U5,t:"Artículo XXIV del GATT y la cláusula de nación más favorecida",i:"El artículo XXIV es la excepción que permite las zonas de libre comercio y las uniones aduaneras.",
+ b:[["p","La cláusula de la nación más favorecida (NMF) obliga a un país a dar a todos los miembros de la OMC las mismas ventajas que le conceda a cualquier otro. Es el principio de no discriminación."],
+    ["p","El artículo XXIV del GATT permite formar zonas de libre comercio y uniones aduaneras sin tener que extender esas ventajas a los demás miembros de la OMC. Es una excepción a la NMF y tiene condiciones:"],
+    ["ul",["Se debe liberalizar en lo sustancial el comercio entre los miembros (XXIV:8).","Frente a terceros, los aranceles y regulaciones no deben quedar más altos ni más restrictivos que antes (XXIV:5).","Un acuerdo interino debe incluir un plan y un calendario razonable para completarse (XXIV:5c)."]]],
+ pz:["NMF: mismo trato para todos","Art. XXIV = excepción a la NMF"],
+ ojo:"No confundas el artículo XXIV del GATT con el artículo 32.10 del T-MEC. Uno es de la OMC y el otro es del tratado.",
+ ex:{q:"¿Por qué el T-MEC no viola la cláusula NMF?",a:"Porque el artículo XXIV del GATT permite las zonas de libre comercio y uniones aduaneras como excepción a la NMF, siempre que se liberalice en lo sustancial el comercio entre los miembros y no se suban las barreras frente a terceros."}},
+
+{u:U5,t:"El T-MEC hoy: la revisión conjunta de 2026",i:"El T-MEC sigue vigente, pero Estados Unidos no aceptó renovarlo en su forma actual.",
+ b:[["p","El artículo 34.7 manda una revisión conjunta al sexto aniversario del tratado. Se hizo el 1 de julio de 2026. Estados Unidos no aceptó renovar el T-MEC en su forma actual, así que no se extiende de inmediato por 16 años más. El tratado sigue vigente al menos hasta 2036 y entra en un esquema de revisiones anuales."],
+    ["p","Una revisión no es una denuncia. Retirarse del tratado (artículo 34.1) exige una notificación que surte efectos seis meses después."]],
+ nuevo:"Esto es una novedad y tu Actividad 6 no la menciona. Pregunta a tu profesor si la considera para el examen. Las negociaciones siguen abiertas y la situación puede cambiar.",
+ pz:["Art. 34.7: revisión conjunta","1 de julio de 2026","EE. UU. no renovó","Vigente hasta 2036"],
+ ojo:"Que no se renueve no significa que el tratado haya terminado. Sigue vigente.",
+ ex:{q:"¿Qué pasó en la revisión del 1 de julio de 2026 y qué significa para el T-MEC?",a:"Estados Unidos no aceptó renovar el tratado en su forma actual. El T-MEC sigue vigente al menos hasta 2036 y se revisa cada año; no se extendió de inmediato por 16 años."}},
+
+{u:UP,t:"Canadá: el proyecto integrador",i:"Canadá es un socio comercial relevante de México, dentro del T-MEC y de otros acuerdos.",
+ b:[["h","Datos básicos, según tu proyecto"],
+    ["ul",["Capital: Ottawa. Idiomas: inglés y francés. Moneda: dólar canadiense.","10 provincias y 3 territorios; cerca de 9.98 millones de km².","Población de 41.8 millones de habitantes (1 de julio de 2026).","PIB de 2.32 billones de dólares y PIB per cápita de 55,697.7 dólares (2025)."]],
+    ["h","Organismos internacionales"],
+    ["ul",["FMI: miembro desde el 27 de diciembre de 1945, con una cuota de 11,023.9 millones de DEG (verificado en la página del FMI). Según el proyecto, no tiene acuerdos de crédito y funciona como acreedor y donante.","Banco Mundial: su mayor contribución anual va a la AIF, el fondo de préstamos en condiciones favorables."]],
+    ["h","Relación con México"],
+    ["ul",["Según Global Affairs Canada, citado en el proyecto, en 2025 México fue el tercer socio comercial de Canadá en mercancías, después de EE. UU. y China.","Acuerdos: T-MEC, TIPAT (CPTPP), CETA con la Unión Europea y la OMC."]],
+    ["h","Lo que debe considerar una empresa mexicana"],
+    ["ul",["Etiquetado bilingüe obligatorio, en inglés y francés.","Normas ambientales estrictas.","Cuotas en lácteos, carnes y maderas.","Diferencias regulatorias entre provincias.","Crecimiento moderado esperado para 2026 y riesgo por los aranceles de EE. UU."]]],
+ pz:["Canadá: T-MEC, TIPAT, CETA, OMC","FMI desde 1945","Etiquetado bilingüe"],
+ ojo:"La conclusión del proyecto puede leerse al revés: la fuente dice que México es el tercer socio de Canadá, no que Canadá sea el tercero de México. Si no lo verificaste, no lo afirmes así.",
+ ex:{q:"Menciona tres requisitos o barreras no arancelarias que enfrenta una empresa mexicana al exportar a Canadá.",a:"Etiquetado bilingüe en inglés y francés, normas ambientales estrictas y cuotas en lácteos, carnes y maderas. También las diferencias regulatorias entre provincias."}},
+
+{u:UP,t:"Ventaja absoluta y ventaja comparativa",i:"Dos ideas distintas que conviene no mezclar.",
+ b:[["ul",["Ventaja absoluta (Adam Smith): un país produce un bien con menos recursos o a menor costo que otro.","Ventaja comparativa (David Ricardo): un país se especializa en lo que produce con menor costo de oportunidad, aunque otro sea mejor en todo. Ambos ganan al comerciar.","Ventaja competitiva (Porter): ventajas sostenibles de una empresa o un país, por diferenciación o por costos."]],
+    ["p","Estos temas son de la Unidad 3, pero aparecen en el proyecto integrador y en el caso del maíz."]],
+ pz:["Absoluta: menos recursos","Comparativa: menor costo de oportunidad"],
+ ojo:"En el proyecto de Canadá, el PIB per cápita, la población y la superficie aparecen como «ventajas absolutas» y el T-MEC como «ventaja comparativa». Son datos de contexto y de acceso al mercado, no ventajas en el sentido de Smith y Ricardo. En el examen usa las definiciones, no esa clasificación.",
+ ex:{q:"Explica la diferencia entre ventaja absoluta y comparativa.",a:"La absoluta es producir un bien con menos recursos que otro país. La comparativa es producir con menor costo de oportunidad; por eso conviene especializarse y comerciar aunque otro país sea mejor en todo."}}
+];
+
+/* ---------- Banco de preguntas ----------
+   mc: la primera opción es la correcta y el orden se mezcla en cada intento.
+   vf: a = true si la afirmación es verdadera. f = número de ficha para repasar. */
+var Q=[
+{u:"4",f:1,t:"mc",q:"¿Cuáles son las tres preguntas básicas que todo sistema económico debe resolver?",o:["Qué, cómo y para quién producir","Cuánto, cuándo y dónde producir","Quién, cuánto y a qué precio vender","Qué importar, qué exportar y a qué arancel"],e:"Las tres preguntas son qué, cómo y para quién producir. Lo que cambia entre sistemas es quién las responde."},
+{u:"4",f:2,t:"mc",q:"¿Qué autores se asocian con la economía de mercado?",o:["Adam Smith y Milton Friedman","Karl Marx y Lenin","Aristóteles y Santo Tomás","Colbert y los mercantilistas"],e:"Smith y Friedman son los autores del pizarrón para la economía de mercado."},
+{u:"4",f:2,t:"vf",q:"En una economía de mercado, el precio se forma por la oferta y la demanda.",a:true,e:"Es la idea central del mercado: el precio sale del encuentro entre oferta y demanda."},
+{u:"4",f:2,t:"mc",q:"¿Cuál es una desventaja de la economía de mercado?",o:["Genera desigualdad y tiende a la concentración","Escasa innovación","Rigidez adaptativa","Baja calidad por planificación central"],e:"Escasa innovación, rigidez y baja calidad son desventajas de la economía dirigida."},
+{u:"4",f:2,t:"mc",q:"¿Cuál es una ventaja de la economía de mercado?",o:["Incentivos a la innovación y respuesta rápida","Planificación central de la producción","Propiedad estatal de los medios de producción","Reducción de desigualdades por decreto"],e:"Alta eficiencia, incentivos a la innovación y respuesta rápida son las ventajas del mercado."},
+{u:"4",f:3,t:"mc",q:"En la economía dirigida o planificada, ¿quién decide qué, cómo y para quién producir?",o:["Una autoridad central","Los consumidores mediante los precios","Las empresas privadas en competencia","El sector privado y el público por igual"],e:"En la dirigida decide una autoridad central, que planifica."},
+{u:"4",f:3,t:"mc",q:"¿Con qué autores se asocia la economía dirigida y quiénes la criticaron?",o:["Marx y Lenin; la criticaron Mises y Hayek","Smith y Friedman; la criticó Marx","Ricardo y Porter; la criticó Keynes","Colbert y Aquino; la criticó Smith"],e:"Marx y Lenin se asocian con la dirigida. Mises y Hayek cuestionan el cálculo económico centralizado."},
+{u:"4",f:3,t:"vf",q:"La propiedad estatal y la planificación central son rasgos de la economía dirigida.",a:true,e:"Son sus características principales, junto con la escasa innovación."},
+{u:"4",f:3,t:"mc",q:"Un problema de la economía dirigida es:",o:["Problemas de información y rigidez adaptativa","Tendencia a la concentración en monopolios","Dependencia de la competencia perfecta","Exceso de innovación empresarial"],e:"Sus desventajas son problemas de información, rigidez adaptativa y baja calidad."},
+{u:"4",f:3,t:"mc",q:"Una ventaja que se atribuye a la economía dirigida es:",o:["Capacidad de alto empleo y reducción de desigualdades","Alta eficiencia por competencia","Respuesta rápida a la demanda","Incentivos a la innovación"],e:"Alto empleo y reducción de desigualdades. Eficiencia y respuesta rápida son ventajas del mercado."},
+{u:"4",f:4,t:"mc",q:"¿Qué caracteriza a la economía mixta?",o:["Coexisten la iniciativa privada y la pública","Todo el sistema productivo es estatal","El Estado nunca interviene","Solo existe el sector social"],e:"En la mixta coexisten la iniciativa privada y la pública."},
+{u:"4",f:4,t:"mc",q:"La capacidad de respuesta ante crisis mediante estímulo fiscal es una ventaja de:",o:["La economía mixta","La economía de mercado","El libre comercio puro","La competencia perfecta"],e:"Así quedó en el pizarrón: capacidad de respuesta ante crisis, con estímulo fiscal."},
+{u:"4",f:4,t:"mc",q:"¿Cuáles son desventajas de la economía mixta?",o:["Riesgo de burocracia y conflictos de interés","Escasa innovación y baja calidad por planificación central","Desigualdad extrema sin ninguna regulación","Ausencia total de servicios públicos"],e:"Burocracia, conflicto de intereses y dependencia de la calidad de la intervención."},
+{u:"4",f:4,t:"vf",q:"Según el artículo 25 constitucional, en el desarrollo económico de México concurren los sectores público, social y privado.",a:true,e:"El artículo 25 dice que el Estado rige el desarrollo nacional y que concurren los tres sectores."},
+{u:"4",f:4,t:"mc",q:"Según los artículos 25 y 28 de la Constitución, las áreas estratégicas corresponden de manera exclusiva a:",o:["El sector público","El sector privado","El sector social","Los estados y los municipios"],e:"El artículo 25 dice que el sector público tiene a su cargo, de manera exclusiva, las áreas estratégicas del artículo 28."},
+{u:"4",f:6,t:"mc",q:"En el caso del maíz de clase, ¿para qué se usa principalmente el maíz amarillo?",o:["Alimentación animal y usos industriales","Elaboración de tortillas","Exportación a Canadá","Siembra de autoconsumo"],e:"El blanco es para consumo humano. El amarillo es sobre todo pecuario e industrial, y México depende más de importaciones (según tus apuntes)."},
+{u:"4",f:6,t:"mc",q:"¿Qué prohíbe la reforma constitucional publicada el 17 de marzo de 2025?",o:["Sembrar maíz genéticamente modificado","Importar cualquier maíz del exterior","Consumir cualquier alimento hecho con maíz","Exportar maíz blanco"],e:"Prohíbe la siembra. Los demás usos del maíz genéticamente modificado se evalúan conforme a las leyes aplicables."},
+{u:"4",f:6,t:"vf",q:"Un arancel eleva el precio del bien importado y ese costo puede pasar a consumidores y empresas.",a:true,e:"El efecto exacto depende del mercado y del diseño de la medida."},
+{u:"4",f:6,t:"mc",q:"El comercio abierto con arancel cero del caso del maíz se vincula con la teoría de:",o:["La ventaja comparativa de David Ricardo","El bullonismo mercantilista de Colbert","La regla del K% de Friedman","La planificación central de Marx"],e:"Ricardo planteó que conviene especializarse según el menor costo de oportunidad."},
+
+{u:"5",f:7,t:"mc",q:"¿Qué nivel de integración sigue después de la zona de libre comercio?",o:["Unión aduanera","Mercado común","Acuerdo preferencial","Unión económica y monetaria"],e:"El orden es: acuerdo preferencial, ZLC, unión aduanera, mercado común, unión económica y monetaria, integración total."},
+{u:"5",f:7,t:"mc",q:"¿Qué añade el mercado común a la unión aduanera?",o:["Libre circulación de factores de producción","Una moneda única","Un arancel externo común","Reducción parcial de aranceles"],e:"Los factores de producción son el capital y el trabajo."},
+{u:"5",f:7,t:"mc",q:"La unión económica y monetaria añade:",o:["Armonización de políticas económicas y moneda única","Libre circulación de mercancías solamente","Eliminación del arancel externo común","Una autoridad política común"],e:"La autoridad política común es el nivel siguiente: integración económica total."},
+{u:"5",f:7,t:"mc",q:"¿Cuál es el orden correcto de menor a mayor integración?",o:["Acuerdo preferencial, ZLC, unión aduanera, mercado común, unión económica y monetaria, integración total","ZLC, acuerdo preferencial, mercado común, unión aduanera, integración total, unión económica y monetaria","Unión aduanera, ZLC, acuerdo preferencial, unión económica, mercado común, integración total","Mercado común, unión aduanera, ZLC, acuerdo preferencial, integración total, unión económica"],e:"Repite en voz alta: preferir, liberar, arancel común, factores, moneda, gobierno."},
+{u:"5",f:8,t:"mc",q:"¿Qué conserva cada país en una zona de libre comercio?",o:["Su propia política arancelaria frente a terceros","Un arancel externo común","Una moneda compartida","La libre circulación de trabajadores"],e:"Esa es la diferencia con la unión aduanera, que adopta un arancel externo común."},
+{u:"5",f:8,t:"mc",q:"¿Qué caracteriza a una unión aduanera?",o:["Un arancel externo común frente a terceros","Cada país fija su arancel frente a terceros","Una moneda única","Solo una reducción parcial de aranceles"],e:"El arancel externo común (AEC) es lo que la define."},
+{u:"5",f:9,t:"mc",q:"¿Qué tipo de integración define a México, Estados Unidos y Canadá?",o:["Zona de libre comercio","Unión aduanera","Mercado común","Unión económica y monetaria"],e:"El T-MEC establece una zona de libre comercio."},
+{u:"5",f:9,t:"vf",q:"El T-MEC entró en vigor el 1 de julio de 2020 y sustituyó al TLCAN.",a:true,e:"Así lo señalan tu Actividad 6 y el proyecto integrador."},
+{u:"5",f:9,t:"vf",q:"Bajo el T-MEC existe un arancel externo común para los tres países.",a:false,e:"No existe: cada país conserva sus aranceles frente a terceros. Eso lo distingue de una unión aduanera."},
+{u:"5",f:11,t:"vf",q:"México puede firmar acuerdos comerciales con otros países, como los de la Unión Europea, sin autorización de sus socios del T-MEC, aunque con límites como el artículo 32.10.",a:true,e:"Conserva su política comercial, con límites como las reglas de origen, el 32.10 y la solución de controversias."},
+{u:"5",f:8,t:"mc",q:"¿Por qué Francia y Alemania no pueden firmar un TLC propio con México?",o:["Porque la Unión Europea es una unión aduanera y lo negocia la Comisión Europea","Porque el T-MEC lo prohíbe","Porque la OMC no lo permite","Porque México solo puede firmar con países de América"],e:"En una unión aduanera un órgano común negocia con terceros países."},
+{u:"5",f:10,t:"mc",q:"Las reglas de origen sirven para:",o:["Determinar si un producto califica para la preferencia arancelaria","Fijar el arancel externo común","Calcular el IVA de importación","Definir la moneda de pago del comercio"],e:"También ayudan a impedir la triangulación."},
+{u:"5",f:10,t:"mc",q:"Arancel NMF de 20% y margen de preferencia de 75%. ¿Qué arancel efectivo se paga?",o:["5%","15%","75%","25%"],e:"20% × (1 − 0.75) = 20% × 0.25 = 5%."},
+{u:"5",f:10,t:"mc",q:"Un auto fabricado en China que se importa a México:",o:["No es originario del T-MEC solo por importarse; debe cumplir las reglas de origen para entrar con preferencia a EE. UU.","Entra a EE. UU. con arancel cero de forma automática","Se vuelve mexicano al pagar el arancel de importación","Queda exento de todo arancel dentro del T-MEC"],e:"El origen se determina por las reglas del tratado, no por el lugar de importación."},
+{u:"5",f:11,t:"mc",q:"Según el artículo 32.10, ¿con cuánta anticipación debe avisar un país que quiere negociar un TLC con una economía de no mercado?",o:["Al menos 3 meses antes de iniciar las negociaciones","Al menos 30 días después de firmar","Al menos 6 meses después de concluir","No necesita avisar"],e:"Además debe dar a los socios el texto completo al menos 30 días antes de firmar."},
+{u:"5",f:11,t:"mc",q:"Si un país firma un TLC con una economía de no mercado, según el artículo 32.10, los otros socios pueden:",o:["Terminar el T-MEC con aviso de 6 meses y sustituirlo por un acuerdo bilateral","Imponerle aranceles automáticos de 100%","Expulsarlo de la OMC","Suspender el tratado por un día"],e:"El acuerdo bilateral conservaría las disposiciones del T-MEC, salvo las que las partes acuerden que no aplican."},
+{u:"5",f:12,t:"mc",q:"El artículo XXIV del GATT es:",o:["Una excepción a la cláusula NMF que permite ZLC y uniones aduaneras","La propia cláusula de nación más favorecida","El mecanismo de solución de controversias del T-MEC","El capítulo de reglas de origen del T-MEC"],e:"Permite formar esos bloques sin extender las ventajas a todos los miembros de la OMC, bajo condiciones."},
+{u:"5",f:12,t:"mc",q:"La cláusula de nación más favorecida obliga a un país a:",o:["Dar a todos los miembros de la OMC las ventajas que dé a cualquier otro","Dar arancel cero a sus vecinos","Imponer aranceles distintos según el país","Negociar solo en bloque"],e:"Es el principio de no discriminación."},
+{u:"5",f:11,t:"mc",q:"¿Qué capítulo del T-MEC trata sobre administración aduanera y facilitación del comercio?",o:["Capítulo 7","Capítulo 4","Capítulo 31","Capítulo 32"],e:"El 4 es de reglas de origen, el 31 de solución de controversias y el 32 de excepciones y disposiciones generales."},
+{u:"5",f:10,t:"mc",q:"El Sistema Generalizado de Preferencias (SGP) es:",o:["No recíproco: el país otorgante no exige una concesión equivalente","Recíproco: ambos reducen por igual","Una unión aduanera","Un acuerdo preferencial entre vecinos"],e:"No es recíproco."},
+{u:"5",f:13,t:"mc",q:"En la revisión conjunta del T-MEC del 1 de julio de 2026 (artículo 34.7):",o:["Estados Unidos no aceptó renovarlo en su forma actual y el tratado sigue vigente","El T-MEC se extendió automáticamente por 16 años","México se retiró del tratado","El T-MEC dejó de estar vigente"],e:"Sigue vigente al menos hasta 2036, con revisiones anuales. Es una novedad: confirma con tu profesor si entra al examen."},
+{u:"5",f:7,t:"mc",q:"La eurozona es el ejemplo clásico de:",o:["Unión económica y monetaria","Zona de libre comercio","Acuerdo preferencial","Mercado común sin moneda"],e:"Tiene armonización de políticas y moneda única."},
+
+{u:"P",f:14,t:"mc",q:"Según el proyecto, ¿qué lugar ocupa México entre los socios comerciales de Canadá en mercancías (2025)?",o:["Tercero, después de EE. UU. y China","Primero","Segundo, después de EE. UU.","Quinto"],e:"Dato de Global Affairs Canada citado en tu proyecto."},
+{u:"P",f:14,t:"mc",q:"¿Desde cuándo es Canadá miembro del FMI?",o:["27 de diciembre de 1945","1 de julio de 2020","1960","1 de enero de 1994"],e:"Verificado en la página del FMI. Su cuota es de 11,023.9 millones de DEG."},
+{u:"P",f:14,t:"mc",q:"En el Banco Mundial, la mayor contribución anual de Canadá se destina a:",o:["La AIF, el fondo de préstamos en condiciones favorables","El pago de aranceles","La reserva monetaria del T-MEC","El comercio de materias primas"],e:"La AIF da préstamos o donaciones a bajo interés a los países miembros más pobres."},
+{u:"P",f:14,t:"mc",q:"¿Cuáles son los acuerdos comerciales de Canadá que menciona el proyecto?",o:["T-MEC, TIPAT (CPTPP), CETA y OMC","T-MEC, Mercosur y ALBA","TLCUEM, ALADI y CAN","TLCAN, APEC y OCDE"],e:"Para México, los más importantes son el T-MEC y el TIPAT."},
+{u:"P",f:14,t:"mc",q:"¿Qué requisito debe considerar una empresa mexicana que exporta a Canadá, según el proyecto?",o:["Etiquetado bilingüe en inglés y francés","Etiquetado solo en inglés","Pagar el arancel externo común","Usar una moneda única"],e:"También normas ambientales estrictas y cuotas en lácteos, carnes y maderas."},
+{u:"P",f:15,t:"mc",q:"La ventaja absoluta, según Adam Smith, significa:",o:["Producir un bien con menos recursos o a menor costo que otro país","Producir con menor costo de oportunidad","Tener una marca reconocida","Tener más población"],e:"La de menor costo de oportunidad es la comparativa."},
+{u:"P",f:15,t:"mc",q:"La ventaja comparativa, según David Ricardo, significa:",o:["Especializarse en lo que se produce con menor costo de oportunidad","Producir todo mejor que otro país","Tener acceso preferencial por un tratado","Ser el mayor exportador del mundo"],e:"Por eso conviene comerciar aunque otro país sea mejor en todo."}
+];
+
+var UNITS={"4":"Unidad 4","5":"Unidad 5","P":"Proyecto y apoyo"};
+var LET=["A","B","C","D"];
+
+/* ---------- Utilidades ---------- */
+var LS={
+  get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+  set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},
+  del:function(k){try{localStorage.removeItem(k)}catch(e){}}
+};
+function el(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function ids(filter){var r=[];Q.forEach(function(q,i){if(!filter||filter(q,i))r.push(i)});return r}
+
+var done=LS.get("hgi-fichas",{});
+var missed=LS.get("hgi-falladas",{});
+var history=LS.get("hgi-historial",[]);
+var panels={aprender:document.getElementById("p-aprender"),practicar:document.getElementById("p-practicar"),examen:document.getElementById("p-examen")};
+var current="aprender";
+var session=null;
+var practiceFilter="all";
+
+/* ---------- Pestañas y progreso ---------- */
+function show(name){
+  current=name;
+  ["aprender","practicar","examen"].forEach(function(k){
+    panels[k].hidden=(k!==name);
+    document.getElementById("tab-"+k).setAttribute("aria-selected",k===name?"true":"false");
+  });
+  window.scrollTo(0,0);
+}
+function updateProgress(){
+  var n=0;F.forEach(function(f,i){if(done[i])n++});
+  document.getElementById("progText").textContent="";
+  var b=el("b",null,n+" de "+F.length);
+  var t=document.getElementById("progText");
+  t.appendChild(b);t.appendChild(document.createTextNode(" fichas entendidas"));
+  document.getElementById("progBar").style.width=Math.round(n/F.length*100)+"%";
+}
+["aprender","practicar","examen"].forEach(function(k){
+  document.getElementById("tab-"+k).addEventListener("click",function(){
+    show(k);
+    if(k==="practicar"&&!session)renderPracticeHome();
+    if(k==="examen"&&!session)renderExamHome();
+  });
+});
+
+/* ---------- Aprender ---------- */
+function renderBlocks(box,blocks){
+  blocks.forEach(function(b){
+    var k=b[0],v=b[1];
+    if(k==="p")box.appendChild(el("p",null,v));
+    else if(k==="h")box.appendChild(el("h4",null,v));
+    else if(k==="f")box.appendChild(el("p","formula",v));
+    else if(k==="ul"||k==="ol"){var l=el(k);v.forEach(function(x){l.appendChild(el("li",null,x))});box.appendChild(l)}
+    else if(k==="t"){
+      var w=el("div","tw"),tb=el("table"),th=el("thead"),tr=el("tr");
+      v.head.forEach(function(h){var c=el("th",null,h);c.scope="col";tr.appendChild(c)});
+      th.appendChild(tr);tb.appendChild(th);
+      var bd=el("tbody");
+      v.rows.forEach(function(r){var row=el("tr");r.forEach(function(c,i){var cell=el(i===0?"th":"td",null,c);if(i===0)cell.scope="row";row.appendChild(cell)});bd.appendChild(row)});
+      tb.appendChild(bd);w.appendChild(tb);box.appendChild(w);
+    }
+  });
+}
+function renderLearn(){
+  var host=panels.aprender;host.textContent="";
+  host.appendChild(el("p","lead","Lee las fichas en orden. Abre una, entiéndela y márcala cuando puedas explicarla sin mirar. Cada ficha termina con una pregunta para que la expliques tú. Cuando termines, pasa a Practicar."));
+  var lastU=null,list=null,group=null;
+  F.forEach(function(f,i){
+    if(f.u!==lastU){
+      group=el("div","group");group.appendChild(el("h2",null,f.u));
+      list=el("ol","path");group.appendChild(list);host.appendChild(group);lastU=f.u;
+    }
+    var li=el("li");
+    var d=el("details","ficha"+(done[i]?" done":""));d.setAttribute("data-n",String(i+1));
+    var s=el("summary");
+    s.appendChild(el("span","t",f.t));
+    s.appendChild(el("span","chev","›"));
+    s.appendChild(el("span","i",f.i));
+    d.appendChild(s);
+    var num=el("span","num",done[i]?"✓":String(i+1));num.setAttribute("aria-hidden","true");
+    var body=el("div","fbody");
+    renderBlocks(body,f.b);
+    if(f.nuevo){var nv=el("div","nuevo");nv.textContent=f.nuevo;body.appendChild(nv)}
+    if(f.pz){var pz=el("div","pizarron");f.pz.forEach(function(line){pz.appendChild(el("div",null,line))});body.appendChild(pz)}
+    var oj=el("div","ojo");oj.appendChild(el("strong",null,"Ojo. "));oj.appendChild(document.createTextNode(f.ojo));body.appendChild(oj);
+    var ex=el("div","explica");
+    var p1=el("p");p1.appendChild(el("strong",null,"Explícalo tú. "));p1.appendChild(document.createTextNode(f.ex.q));ex.appendChild(p1);
+    var ans=el("p","answer",f.ex.a);ans.hidden=true;
+    var bt=el("button","btn","Ver respuesta");bt.type="button";
+    bt.addEventListener("click",function(){ans.hidden=!ans.hidden;bt.textContent=ans.hidden?"Ver respuesta":"Ocultar respuesta"});
+    ex.appendChild(bt);ex.appendChild(ans);body.appendChild(ex);
+    var fb=el("div","fbtns");
+    var mk=el("button","btn primary",done[i]?"Quitar marca de entendida":"Ya lo entiendo");mk.type="button";
+    mk.addEventListener("click",function(){
+      if(done[i])delete done[i];else done[i]=1;
+      LS.set("hgi-fichas",done);updateProgress();
+      d.classList.toggle("done",!!done[i]);
+      num.textContent=done[i]?"✓":String(i+1);
+      mk.textContent=done[i]?"Quitar marca de entendida":"Ya lo entiendo";
+    });
+    fb.appendChild(mk);body.appendChild(fb);
+    d.appendChild(body);li.appendChild(num);li.appendChild(d);list.appendChild(li);
+  });
+  var go=el("div","fbtns");
+  var b1=el("button","btn primary","Pasar a Practicar");b1.type="button";b1.addEventListener("click",function(){show("practicar");if(!session)renderPracticeHome()});
+  go.appendChild(b1);host.appendChild(go);
+}
+function openFicha(n){
+  session=null;show("aprender");
+  var d=panels.aprender.querySelector('details[data-n="'+n+'"]');
+  if(d){d.open=true;d.scrollIntoView({block:"start",behavior:"smooth"});var s=d.querySelector("summary");if(s)s.focus({preventScroll:true})}
+}
+
+/* ---------- Práctica y examen ---------- */
+function missedCount(){return Object.keys(missed).length}
+function renderPracticeHome(){
+  var host=panels.practicar;host.textContent="";
+  host.appendChild(el("p","lead","Responde con corrección inmediata. Si fallas, la guía te dice qué ficha repasar. No cuenta para ninguna calificación."));
+  var chips=el("div","chips");chips.setAttribute("role","group");chips.setAttribute("aria-label","Qué practicar");
+  var opts=[["all","Todo"],["4","Unidad 4"],["5","Unidad 5"],["P","Proyecto y apoyo"],["missed","Solo las que fallé ("+missedCount()+")"]];
+  opts.forEach(function(o){
+    var c=el("button","chip",o[1]);c.type="button";c.setAttribute("aria-pressed",practiceFilter===o[0]?"true":"false");
+    c.addEventListener("click",function(){practiceFilter=o[0];renderPracticeHome()});
+    chips.appendChild(c);
+  });
+  host.appendChild(chips);
+  var list=pickPractice();
+  host.appendChild(el("p","hint",list.length+" preguntas en esta selección."));
+  var go=el("button","btn primary","Empezar a practicar");go.type="button";
+  if(!list.length){go.disabled=true;host.appendChild(el("p",null,"Todavía no tienes preguntas falladas. Practica o haz el examen y aquí aparecerán."))}
+  go.addEventListener("click",function(){startSession("practice",shuffle(list))});
+  host.appendChild(go);
+}
+function pickPractice(){
+  if(practiceFilter==="all")return ids();
+  if(practiceFilter==="missed")return ids(function(q,i){return missed[i]});
+  return ids(function(q){return q.u===practiceFilter});
+}
+function renderExamHome(){
+  var host=panels.examen;host.textContent="";
+  host.appendChild(el("p","lead","30 preguntas de las Unidades 4 y 5 y del proyecto, sin pistas. Al final recibes una calificación sobre 10 y las fichas que te conviene repasar. Antes de empezar, haz las fichas y la práctica."));
+  var go=el("button","btn primary","Empezar examen de 30 preguntas");go.type="button";
+  go.addEventListener("click",function(){startSession("exam",examIds())});
+  host.appendChild(go);
+  if(history.length){
+    host.appendChild(el("h2",null,"Tus últimos intentos"));
+    var ol=el("ul","hist");
+    history.slice(-5).reverse().forEach(function(h){ol.appendChild(el("li",null,h.d+": "+h.s+" sobre 10 ("+h.c+" de "+h.n+")"))});
+    host.appendChild(ol);
+  }
+}
+function examIds(){
+  var g={"4":[],"5":[],"P":[]};
+  Q.forEach(function(q,i){g[q.u].push(i)});
+  var take=[["4",11],["5",15],["P",4]],out=[];
+  take.forEach(function(t){out=out.concat(shuffle(g[t[0]]).slice(0,t[1]))});
+  return shuffle(out);
+}
+function startSession(mode,order){
+  session={mode:mode,order:order,pos:0,score:0,log:[],cur:null,done:false};
+  prepare();renderSession();
+}
+function host(){return session.mode==="exam"?panels.examen:panels.practicar}
+function prepare(){
+  var q=Q[session.order[session.pos]],o;
+  if(q.t==="vf")o=[{text:"Verdadero",right:q.a===true},{text:"Falso",right:q.a===false}];
+  else o=shuffle(q.o.map(function(t,i){return{text:t,right:i===0}}));
+  session.cur={opts:o,picked:-1};
+}
+function renderSession(){
+  var h=host();h.textContent="";
+  if(session.done)return renderResults();
+  var qi=session.order[session.pos],q=Q[qi],c=session.cur,n=session.order.length;
+  var meter=el("div","meter"),meta=el("div","meta");
+  var l=el("span");l.appendChild(document.createTextNode("Pregunta "));l.appendChild(el("b",null,String(session.pos+1)));l.appendChild(document.createTextNode(" de "+n));
+  meta.appendChild(l);
+  if(session.mode==="practice"){var r=el("span");r.appendChild(document.createTextNode("Aciertos "));r.appendChild(el("b",null,String(session.score)));meta.appendChild(r)}
+  var bar=el("div","bar"),fill=el("i");fill.style.width=Math.round(session.pos/n*100)+"%";bar.appendChild(fill);
+  meter.appendChild(meta);meter.appendChild(bar);
+  var card=el("section","qcard");
+  card.appendChild(el("span","qtag",UNITS[q.u]));
+  card.appendChild(el("h2","q",q.q));
+  var ul=el("ul","opts");
+  c.opts.forEach(function(o,i){
+    var li=el("li"),b=el("button","opt");b.type="button";b.id="opt"+i;
+    b.appendChild(el("span","k",q.t==="vf"?(i===0?"V":"F"):LET[i]));
+    b.appendChild(el("span","x",o.text));
+    b.addEventListener("click",function(){pick(i)});
+    li.appendChild(b);ul.appendChild(li);
+  });
+  card.appendChild(ul);
+  var fb=el("div");fb.id="fb";fb.setAttribute("aria-live","polite");card.appendChild(fb);
+  card.appendChild(el("p","hint",q.t==="vf"?"Toca una opción, o usa las teclas V y F. Enter para continuar.":"Toca una opción, o usa las teclas A, B, C y D. Enter para continuar."));
+  h.appendChild(meter);h.appendChild(card);
+  if(c.picked>=0)paint();
+}
+function pick(i){
+  if(session.cur.picked>=0)return;
+  session.cur.picked=i;
+  var o=session.cur.opts[i],qi=session.order[session.pos];
+  if(o.right){session.score++;delete missed[qi]}else missed[qi]=1;
+  LS.set("hgi-falladas",missed);
+  var right=session.cur.opts.filter(function(x){return x.right})[0].text;
+  session.log.push({qi:qi,ok:o.right,you:o.text,right:right});
+  paint();
+}
+function paint(){
+  var c=session.cur,qi=session.order[session.pos],q=Q[qi];
+  c.opts.forEach(function(o,i){
+    var b=document.getElementById("opt"+i);if(!b)return;
+    b.disabled=true;var tag=null;
+    if(o.right){b.classList.add("ok");tag="Correcta"}
+    else if(i===c.picked){b.classList.add("bad");tag="Tu respuesta"}
+    else b.classList.add("dim");
+    if(tag)b.appendChild(el("span","tag",(o.right?"✓ ":"✗ ")+tag));
+  });
+  var good=c.opts[c.picked].right,fb=document.getElementById("fb");fb.textContent="";
+  var box=el("div","fb "+(good?"ok":"bad"));
+  box.appendChild(el("strong",null,good?"Correcto":"Incorrecto"));
+  box.appendChild(el("p",null,q.e));
+  if(!good){
+    var rb=el("button","repasa","Repasa la ficha «"+F[q.f-1].t+"»");rb.type="button";
+    rb.addEventListener("click",function(){openFicha(q.f)});box.appendChild(rb);
+  }
+  fb.appendChild(box);
+  var last=session.pos===session.order.length-1;
+  var nx=el("button","btn primary next",last?"Ver resultado":"Siguiente");nx.type="button";nx.id="next";
+  nx.addEventListener("click",next);fb.appendChild(nx);
+  nx.focus({preventScroll:true});
+  box.scrollIntoView({block:"nearest",behavior:"smooth"});
+}
+function next(){
+  if(session.pos>=session.order.length-1){
+    session.done=true;
+    if(session.mode==="exam"){
+      var s10=(session.score/session.order.length*10).toFixed(1);
+      history.push({d:new Date().toLocaleDateString("es-MX",{day:"numeric",month:"short"}),s:s10,c:session.score,n:session.order.length});
+      history=history.slice(-20);LS.set("hgi-historial",history);
+    }
+    renderSession();window.scrollTo(0,0);return;
+  }
+  session.pos++;prepare();renderSession();window.scrollTo(0,0);
+}
+function renderResults(){
+  var h=host(),n=session.order.length,exam=session.mode==="exam";
+  var card=el("section","qcard");
+  card.appendChild(el("span","qtag",exam?"Resultado del examen":"Resultado de la práctica"));
+  var sc=el("div","score");
+  if(exam){sc.appendChild(document.createTextNode((session.score/n*10).toFixed(1)+" "));sc.appendChild(el("small",null,"sobre 10"))}
+  else{sc.appendChild(document.createTextNode(session.score+" "));sc.appendChild(el("small",null,"de "+n))}
+  card.appendChild(sc);
+  var pct=session.score/n;
+  card.appendChild(el("p",null,pct>=.9?"Lo dominas. Haz un último repaso ligero y descansa.":pct>=.7?"Vas bien. Repasa las fichas de lo que fallaste y vuelve a intentarlo.":"Todavía hay huecos, y es normal. Vuelve a las fichas indicadas y repite solo las falladas."));
+  var by={};session.log.forEach(function(x){var u=Q[x.qi].u;by[u]=by[u]||{ok:0,t:0};by[u].t++;if(x.ok)by[u].ok++});
+  var g=el("div","bymod");
+  Object.keys(by).forEach(function(u){var d=el("div");d.appendChild(el("span",null,UNITS[u]));d.appendChild(el("b",null,by[u].ok+" de "+by[u].t));g.appendChild(d)});
+  card.appendChild(g);
+  var wrong=session.log.filter(function(x){return!x.ok});
+  var act=el("div","fbtns");
+  if(wrong.length){
+    var bw=el("button","btn primary","Repetir solo las "+wrong.length+" falladas");bw.type="button";
+    bw.addEventListener("click",function(){startSession("practice",shuffle(wrong.map(function(x){return x.qi})))});act.appendChild(bw);
+  }
+  var ba=el("button","btn",exam?"Hacer otro examen":"Volver a practicar");ba.type="button";
+  ba.addEventListener("click",function(){var m=session.mode;session=null;if(m==="exam")startSession("exam",examIds());else renderPracticeHome()});
+  act.appendChild(ba);
+  var bh=el("button","btn","Ir a las fichas");bh.type="button";bh.addEventListener("click",function(){session=null;show("aprender")});act.appendChild(bh);
+  card.appendChild(act);
+  if(wrong.length){
+    card.appendChild(el("h2",null,"Lo que fallaste"));
+    var ul=el("ul","miss");
+    wrong.forEach(function(x){
+      var q=Q[x.qi],li=el("li");
+      li.appendChild(el("span","mq",q.q));
+      li.appendChild(el("span","you","✗ Tu respuesta: "+x.you));
+      li.appendChild(el("span","right","✓ Correcta: "+x.right));
+      li.appendChild(el("span",null,q.e));
+      var rb=el("button","repasa","Repasa la ficha «"+F[q.f-1].t+"»");rb.type="button";rb.style.alignSelf="flex-start";
+      rb.addEventListener("click",function(){openFicha(q.f)});li.appendChild(rb);
+      ul.appendChild(li);
+    });
+    card.appendChild(ul);
+  }
+  h.appendChild(card);
+}
+
+document.addEventListener("keydown",function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey||!session||session.done||current==="aprender")return;
+  var q=Q[session.order[session.pos]],k=e.key.toLowerCase(),i=-1;
+  if(q.t==="vf"){i=k==="v"?0:k==="f"?1:-1}
+  else{i=["a","b","c","d"].indexOf(k)}
+  if(i<0&&["1","2","3","4"].indexOf(k)>=0)i=parseInt(k,10)-1;
+  if(i>=0&&session.cur.picked<0&&session.cur.opts[i]){pick(i);return}
+  if((k==="enter"||k==="arrowright")&&session.cur.picked>=0){
+    var nx=document.getElementById("next");
+    if(nx&&document.activeElement!==nx){e.preventDefault();next()}
+  }
+});
+
+document.getElementById("btnReset").addEventListener("click",function(){
+  if(!window.confirm("¿Borrar tus fichas marcadas, tus preguntas falladas y tu historial de exámenes?"))return;
+  LS.del("hgi-fichas");LS.del("hgi-falladas");LS.del("hgi-historial");
+  done={};missed={};history=[];session=null;
+  updateProgress();renderLearn();renderPracticeHome();renderExamHome();show("aprender");
+});
+
+/* ---------- Arranque ---------- */
+updateProgress();renderLearn();renderPracticeHome();renderExamHome();
+})();
+</script>
+</body>
+</html>
