@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Quiz Derecho Aduanero · Parcial 2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: una sola columna de lectura; tarjeta de pregunta, opciones apiladas, resultado inmediato debajo. */
+:root{
+  --bg:#EEF1F5; --surface:#FFFFFF; --ink:#141C2B; --muted:#56627A; --line:#D3DAE5;
+  --accent:#1D4F9C; --accent-ink:#FFFFFF; --soft:#E3EAF6;
+  --ok:#17653F; --ok-bg:#DDF2E6; --bad:#A12D24; --bad-bg:#FBE3E0;
+  --font-body:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1420; --surface:#17202F; --ink:#E8EDF5; --muted:#9AA7BD; --line:#2A364B;
+  --accent:#7FAAF0; --accent-ink:#0E1420; --soft:#1F2C44;
+  --ok:#7FD6A3; --ok-bg:#12372A; --bad:#F29B93; --bad-bg:#401C1A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1420; --surface:#17202F; --ink:#E8EDF5; --muted:#9AA7BD; --line:#2A364B;
+  --accent:#7FAAF0; --accent-ink:#0E1420; --soft:#1F2C44;
+  --ok:#7FD6A3; --ok-bg:#12372A; --bad:#F29B93; --bad-bg:#401C1A; color-scheme:dark}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:720px;margin-inline:auto;display:flex;flex-direction:column;gap:16px}
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.brand{font-weight:700;font-size:19px;letter-spacing:.01em}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;color:inherit;cursor:pointer}
+.ghost{background:transparent;border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:14px;font-weight:600;color:var(--muted)}
+.ghost:hover{border-color:var(--accent);color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.meter{display:flex;flex-direction:column;gap:8px}
+.meta{display:flex;justify-content:space-between;gap:12px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.meta b{color:var(--ink)}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .25s}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.mod{align-self:flex-start;font-family:var(--font-mono);font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--soft);padding:4px 10px;border-radius:6px}
+h1,h2{margin:0;text-wrap:balance}
+.q{font-size:21px;line-height:1.35;font-weight:600}
+.opts{display:flex;flex-direction:column;gap:10px;padding:0;margin:0;list-style:none}
+.opt{width:100%;display:flex;gap:14px;align-items:flex-start;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:13px 14px;min-width:0}
+.opt:hover:not(:disabled){border-color:var(--accent);background:var(--soft)}
+.opt .k{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-mono);font-size:14px;font-weight:600;border:1.5px solid var(--line);color:var(--muted)}
+.opt .t{flex:1;min-width:0;overflow-wrap:anywhere}
+.opt .tag{flex:none;font-size:13px;font-weight:700;align-self:center}
+.opt:disabled{cursor:default}
+.opt.ok{border-color:var(--ok);background:var(--ok-bg)}
+.opt.ok .k{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.opt.ok .tag{color:var(--ok)}
+.opt.bad{border-color:var(--bad);background:var(--bad-bg)}
+.opt.bad .k{background:var(--bad);border-color:var(--bad);color:var(--surface)}
+.opt.bad .tag{color:var(--bad)}
+.opt.dim{opacity:.6}
+.fb{border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.fb.ok{background:var(--ok-bg);color:var(--ok)}
+.fb.bad{background:var(--bad-bg);color:var(--bad)}
+.fb strong{font-size:16px}
+.fb p{margin:0;color:var(--ink);font-size:16px}
+.next{align-self:flex-end;background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:12px 22px;font-weight:700;font-size:16px}
+.next:hover{filter:brightness(1.08)}
+.hint{font-size:13px;color:var(--muted)}
+.foot{margin:8px 0 0;font-size:13px;color:var(--muted);text-align:center}
+.score{font-family:var(--font-mono);font-size:56px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.score small{font-size:24px;color:var(--muted)}
+.res-actions{display:flex;flex-wrap:wrap;gap:10px}
+.res-actions button{border-radius:10px;padding:12px 18px;font-weight:700;border:2px solid var(--accent);background:transparent;color:var(--accent)}
+.res-actions button.primary{background:var(--accent);color:var(--accent-ink)}
+.miss{display:flex;flex-direction:column;gap:12px;padding:0;margin:0;list-style:none}
+.miss li{border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;font-size:15px}
+.miss .mq{font-weight:600}
+.miss .you{color:var(--bad)}
+.miss .right{color:var(--ok)}
+.bymod{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.bymod div{background:var(--soft);border-radius:8px;padding:8px 12px;font-size:14px;display:flex;justify-content:space-between;gap:8px;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+@media (max-width:420px){.card{padding:16px}.q{font-size:19px}}
+</style>
+
+</head>
+<body>
+<div class="wrap" id="app">
+  <div class="top">
+    <div class="brand">Derecho Aduanero · Parcial 2</div>
+    <div class="tools">
+      <button class="ghost" id="btnShuffle" type="button">Mezclar preguntas</button>
+      <button class="ghost" id="btnRestart" type="button">Reiniciar</button>
+    </div>
+  </div>
+  <div id="view"></div>
+  <p class="foot">Parcial 2: desde zonas libres y franja fronteriza hasta el final del temario · Hecho por David Callejas · Derecho Aduanero · UVM</p>
+</div>
+
+<script>
+(function(){
+var MODS={6:'Módulo 6 · Zonas libres y franja fronteriza',7:'Módulo 7 · Despacho, infracciones, PAMA y MOA'};
+/* La primera opción de cada pregunta es la correcta; el orden se mezcla al azar en cada intento. */
+var Q=[
+{m:6,q:'La franja fronteriza comprende:',o:['20 kilómetros paralelos a la línea divisoria','10 kilómetros paralelos a la línea divisoria','50 kilómetros paralelos a la línea divisoria','100 kilómetros paralelos a la línea divisoria'],e:'Art. 136 LA: franja de 20 km hacia el interior, paralela a la línea divisoria internacional. La región fronteriza es la que determine el Ejecutivo.'},
+{m:6,q:'¿Cuál es la diferencia entre franja y región fronteriza?',o:['La franja mide 20 km y la región la determina el Ejecutivo Federal','La franja la determina el Ejecutivo y la región mide 20 km','La franja es solo del norte y la región solo del sur del país','La franja es de zonas costeras y la región es de zonas terrestres'],e:'Pregunta frecuente de examen. Para recordar: frontera = línea; franja = 20 km; región = la fija el Ejecutivo (art. 136 LA).'},
+{m:6,q:'En términos generales, la franja fronteriza se regula en la Ley Aduanera en los artículos:',o:['136 a 142','35 a 43','90 a 106','150 a 153'],e:'Los arts. 136 a 142 forman el título de franjas y regiones fronterizas. La reexpedición está en los arts. 138 y 139.'},
+{m:6,q:'¿Quién determina qué territorio es región fronteriza?',o:['El Ejecutivo Federal','El Congreso de la Unión','El SAT mediante reglas generales','Los gobiernos de los estados fronterizos'],e:'Art. 136 LA. Ejemplos de las guías: Baja California, Quintana Roo y la franja norte de Sonora.'},
+{m:6,q:'¿Qué río delimita la frontera de México con Guatemala?',o:['El Suchiate','El Bravo','El Hondo','El Lerma'],e:'El Bravo separa a México de EE. UU. y el Hondo, de Belice. En clase se mencionó el Suchiate con Guatemala.'},
+{m:6,q:'El mar territorial de México mide:',o:['12 millas náuticas','200 kilómetros','20 kilómetros','200 millas náuticas'],e:'En clase se dijo «200 kilómetros». Precisión: el mar territorial son 12 millas náuticas y la zona económica exclusiva, 200 millas náuticas.'},
+{m:6,q:'El artículo 131 de la Constitución establece que:',o:['Gravar las mercancías en comercio exterior es facultad privativa de la Federación','Cada estado fija sus propios aranceles en las fronteras','Las zonas libres quedan exentas de todo impuesto','La franja fronteriza mide 20 kilómetros hacia el interior'],e:'Art. 131 CPEUM: el Ejecutivo puede ser facultado por el Congreso para modificar aranceles. El art. 73, fracc. XXIX, 1º faculta al Congreso a establecer contribuciones al comercio exterior.'},
+{m:6,q:'Como el Congreso puede crear contribuciones, en la frontera puede existir:',o:['Un IVA menor que en el resto del país','El mismo IVA que en el interior del país','Un IVA mayor para compensar el ISR','Un IVA fijado por cada municipio'],e:'Razonamiento de clase: por eso en la zona fronteriza hay un IVA menor. Los estímulos se otorgan por decreto del Ejecutivo.'},
+{m:6,q:'Los estímulos fiscales de la franja fronteriza consisten en:',o:['IVA al 8 % y reducción de un tercio del ISR','IVA al 0 % y exención total de ISR','IVA al 16 % y exención total de IEPS','IVA al 4 % y reducción de la mitad del ISR'],e:'Estímulo de 50 % de la tasa de IVA (16 % a 8 %) y de un tercio del ISR causado; en clase se explicó como tasa cercana a 20 % en ISR para personas morales.'},
+{m:6,q:'El IVA de 8 % en la región fronteriza equivale a:',o:['La mitad de la tasa general de 16 %','Una exención total del impuesto','Una tercera parte de la tasa general','La tasa cero de las exportaciones'],e:'El estímulo reduce a la mitad la tasa general; no elimina el IVA.'},
+{m:6,q:'El estímulo de ISR de la región fronteriza equivale a:',o:['Un tercio del impuesto causado','La eliminación total del ISR','Una tasa fija de 8 % para toda persona','Un pago único del impuesto cada año'],e:'El ISR no se elimina, se reduce: tasa efectiva cercana a 20 % para personas morales (la general es de 30 %).'},
+{m:6,q:'El decreto de estímulos fronterizos publicado el 31 de diciembre de 2025 extendió su vigencia hasta:',o:['El 31 de diciembre de 2026','El 31 de diciembre de 2025','El 31 de diciembre de 2030','Sin fecha de término'],e:'Los decretos de la región fronteriza norte y sur se extienden hasta el 31-dic-2026. El del norte se publicó en 2018 y el del sur en 2020.'},
+{m:6,q:'¿Por qué en clase se dijo que la zona libre «no es tan libre»?',o:['Porque se paga y cuesta, con tasas menores o regímenes especiales','Porque para entrar a ella se necesita una visa especial','Porque solo pueden operar en ella empresas del gobierno','Porque en ella queda prohibido todo comercio con el extranjero'],e:'Por el principio de legalidad no puede haber exención total; existen tratamientos especiales con tasas distintas.'},
+{m:6,q:'Los perfumes de una tienda duty free cuestan menos porque:',o:['La ley prevé un tratamiento fiscal especial para esas tiendas','Son mercancía de contrabando que no paga nada','Nunca pagan ningún impuesto por ser artículos de lujo','Se importan bajo el régimen de tránsito internacional'],e:'Ejemplo de clase de tratamiento especial previsto en la ley; no significa ausencia total de impuestos.'},
+{m:6,q:'En una zona libre, cuál de estas afirmaciones es correcta:',o:['Los cigarros pagan impuestos altos y las armas requieren permisos','Todas las mercancías están exentas de contribuciones','La ropa usada puede entrar sin ningún tipo de restricción','La piratería se tolera si se paga el IVA de 8 %'],e:'Lo que necesita permiso especial cuesta aunque el producto esté en una zona de beneficio. La ropa usada no se permite y la piratería se decomisa y es contrabando.'},
+{m:6,q:'Un auto «chocolate» es:',o:['Un vehículo internado sin cumplir requisitos, que se decomisa','Un auto nuevo importado bajo un tratado de libre comercio','Un auto usado importado con todos sus permisos en regla','Un auto hecho en México con piezas importadas del extranjero'],e:'Son muy difíciles de legalizar. Aunque se haya pagado una cifra alta por el vehículo, importar sin cumplir requisitos es contrabando.'},
+{m:6,q:'La reexpedición consiste en:',o:['Internar al resto del país mercancía importada a la franja, pagando diferencias','Exportar desde la franja mercancía que se importó definitivamente','Devolver al proveedor extranjero la mercancía que no se vendió','Guardar la mercancía de la franja en un depósito fiscal'],e:'Arts. 138 y 139 LA. Se pagan las diferencias de contribuciones y se cumplen las regulaciones no arancelarias del mercado nacional.'},
+{m:6,q:'La reexpedición se regula en los artículos:',o:['138 y 139','35 y 43','150 y 153','90 y 106'],e:'Arts. 138 y 139 LA, dentro del título de franjas y regiones fronterizas (136 a 142).'},
+{m:6,q:'La finalidad de la reexpedición es:',o:['Evitar evasión fiscal y competencia desleal frente al régimen general','Aumentar el volumen de importaciones que llegan a la franja','Eliminar el IVA de las mercancías que circulan en el interior','Permitir que la mercancía circule sin cumplir permisos'],e:'El tratamiento preferencial de la frontera no debe servir para evadir contribuciones en el interior.'},
+{m:6,q:'Uno de los objetivos de crear zonas libres es:',o:['Ser competitivos frente al país vecino y atraer inversión','Aumentar la recaudación del IVA en las ciudades fronterizas','Impedir las importaciones que provienen de Estados Unidos','Sustituir las funciones aduaneras que realiza el SAT'],e:'Ejemplos de clase: Tijuana y Guatemala, donde el tipo de cambio es desventaja frente a competidores. Objetivos: actividad económica, competitividad, facilitar el comercio y atraer inversión.'},
+{m:6,q:'En la cadena de valor de un celular, la menor ganancia se la queda quien:',o:['Fabrica o ensambla','Crea y diseña','Aporta los componentes','Define la marca'],e:'Quien crea y diseña conserva la tecnología y la marca y obtiene la mayor ganancia. Por eso, aunque México exporte mucho, la ganancia que se queda es baja.'},
+{m:6,q:'Por ser país fabricante, lo que México obtiene principalmente es:',o:['Empleos e impuestos, aunque la ganancia sea baja','La mayor parte de la ganancia por tecnología','La propiedad de las marcas globales de celulares','El control sobre los precios internacionales'],e:'Por eso hay tantas empresas extranjeras. Es la misma idea del recinto fiscalizado estratégico y de la mano de obra especializada.'},
+{m:6,q:'Desde 2019 existe un salario mínimo propio:',o:['De la zona libre de la frontera norte, más alto que el general','De la región sur del país, más bajo que el general','De la Ciudad de México únicamente, por su costo de vida','De los estados costeros, que cambia cada trimestre'],e:'Antes existían tres zonas de salario mínimo y se unificó; los impuestos siguen siendo distintos por zona.'},
+{m:7,q:'El artículo que define el despacho aduanero es el:',o:['35','43','90','151'],e:'Art. 35 LA: conjunto de actos y formalidades relativos a la entrada y salida de mercancías. El 43 es el semáforo; el 90, los regímenes; el 151, el embargo.'},
+{m:7,q:'Para hacer el trámite del despacho, el importador puede:',o:['Hacerlo por sí mismo o contratar a un despacho que cobra','Hacerlo únicamente a través del SAT, sin ningún costo','Contratar solo a la ANAM para que lo realice por él','Esperar a que lo haga de oficio la aduana de entrada'],e:'Lo dicho en clase: cualquiera de los dos; si contratan al despacho, les van a cobrar más.'},
+{m:7,q:'La prevalidación del pedimento se paga:',o:['A un particular autorizado por el SAT','A la ANAM en la propia aduana','A la Secretaría de Economía en ventanilla','Al agente aduanal, como un impuesto'],e:'Art. 16-A LA. No es un impuesto; es la cuota de un prevalidador autorizado.'},
+{m:7,q:'El semáforo fiscal es:',o:['Un mecanismo automatizado que decide si hay reconocimiento','Un sistema que cobra las contribuciones del pedimento','Una auditoría que se hace después del pago','Una resolución que se dicta dentro del PAMA'],e:'Art. 43 LA. Verde: desaduanamiento libre. Rojo: reconocimiento aduanero.'},
+{m:7,q:'En clase se explicó que el semáforo es aleatorio, pero:',o:['Quien importa siempre llegará a tener luz roja alguna vez','Nunca marca rojo a quienes importan con frecuencia','Solo se aplica a importadores que son extranjeros','Siempre marca rojo a quienes importan por primera vez'],e:'Se aplica sin importar la nacionalidad del importador. A quien es nuevo, la primera vez suele pasar y luego lo revisan.'},
+{m:7,q:'Si un importador de pantalones trae de pronto autopartes, lo más probable es que:',o:['No coincida con su perfil y salga luz roja','Salga luz verde por ser un importador regular','Se le cancele de inmediato la patente aduanal','Se le aplique la opción a pago sin revisión'],e:'Perfil y coherencia: la aduana también observa inconsistencias en personas y mercancías.'},
+{m:7,q:'La luz verde del semáforo significa:',o:['Desaduanamiento libre','Reconocimiento aduanero','Embargo precautorio','Inicio del PAMA'],e:'Verde: la mercancía se libera. Rojo: reconocimiento aduanero.'},
+{m:7,q:'Si el semáforo marca rojo, ocurre:',o:['El reconocimiento aduanero','El embargo automático de la mercancía','La cancelación de la patente del agente','La devolución del pedimento al importador'],e:'Rojo significa revisión física y documental. Solo si aparece una irregularidad sigue el embargo precautorio y el PAMA.'},
+{m:7,q:'Las infracciones aduaneras se enumeran en la Ley Aduanera a partir del artículo:',o:['176','150','165','102'],e:'El art. 152 pertenece al procedimiento del PAMA; las infracciones inician en el 176 (título séptimo).'},
+{m:7,q:'El delito de contrabando está previsto en:',o:['Los artículos 102 a 105 del Código Fiscal de la Federación','Los artículos 176 y siguientes de la Ley Aduanera','Los artículos 28 y 30 de la Ley de Comercio Exterior','El artículo 165 de la Ley Aduanera'],e:'Contrabando: introducir o extraer mercancías sin cumplir las reglas (omitir impuestos, mercancía prohibida, sin permiso).'},
+{m:7,q:'La cancelación de la patente del agente aduanal se regula en el artículo:',o:['165','159','167','176'],e:'Art. 165 LA: se cancela, entre otras causas, por datos falsos o inexistentes, omisiones de contribuciones por montos relevantes o sentencia condenatoria por delito fiscal.'},
+{m:7,q:'El PAMA es:',o:['El procedimiento administrativo que inicia con un embargo precautorio','Un proceso penal que se sigue por el delito de contrabando','Una auditoría que se realiza después del despacho','El trámite para solicitar la devolución de impuestos'],e:'Procedimiento Administrativo en Materia Aduanera. Empieza cuando la autoridad embarga precautoriamente mercancías en el reconocimiento aduanero, la verificación en transporte o una comprobación.'},
+{m:7,q:'El PAMA se regula en los artículos:',o:['150 a 153','35 a 43','136 a 142','176 a 180'],e:'Arts. 150 a 153 LA. Hay reglas complementarias, como el art. 154 (sustitución del embargo).'},
+{m:7,q:'El embargo precautorio significa que:',o:['La autoridad retiene la mercancía mientras investiga','La mercancía pasa de inmediato a propiedad del fisco','Se suspende para siempre al importador de sus trámites','Se paga el doble de aranceles para recuperar la carga'],e:'No es una sanción: asegura el interés fiscal. Todos los embargos son precautorios; la mercancía no está perdida.'},
+{m:7,q:'En clase se explicó que con el embargo se retiene:',o:['La mercancía y el medio de transporte','Únicamente los documentos del importador','Únicamente la patente del agente aduanal','Las cuentas bancarias de la empresa importadora'],e:'El medio de transporte (coche, camión, avión) queda como garantía del interés fiscal.'},
+{m:7,q:'Al iniciar el PAMA, en el acta de inicio se le pide al interesado:',o:['Designar dos testigos y un domicilio para notificaciones','Pagar de inmediato la multa que corresponda','Entregar a la autoridad su registro de importador','Abandonar la mercancía a favor del fisco'],e:'Si no lo hace, la autoridad nombra los testigos y notifica conforme al CFF (art. 150 LA).'},
+{m:7,q:'Dentro del PAMA, el plazo para ofrecer pruebas y alegatos es de:',o:['10 días hábiles','5 días hábiles','15 días hábiles','30 días hábiles'],e:'Corre desde el día siguiente a que surte efectos la notificación del acta. Se acreditan con documentos y facturas.'},
+{m:7,q:'En la audiencia del PAMA, lo que más sirve para defenderse es:',o:['Presentar documentos y facturas','Declarar únicamente de forma oral','Pagar el valor total de la mercancía','Presentar un certificado de origen nuevo'],e:'Consejo de clase: guarda todas las facturas; la autoridad busca el error.'},
+{m:7,q:'Si el interesado desvirtúa la causal de embargo, la autoridad:',o:['Resuelve de inmediato, sin sanciones, y devuelve la mercancía','Impone una multa reducida y devuelve la mercancía','Amplía el plazo a seis meses para seguir investigando','Turna el caso a la autoridad que persigue el contrabando'],e:'Art. 153 LA. Con pruebas válidas se devuelve la mercancía embargada.'},
+{m:7,q:'La autoridad debe dictar la resolución del PAMA en un plazo máximo de:',o:['4 meses','2 meses','3 meses','6 meses'],e:'La ley fija cuatro meses desde el día siguiente a que el expediente esté debidamente integrado; no son 30 días.'},
+{m:7,q:'Si la autoridad no resuelve el PAMA en cuatro meses:',o:['Quedan sin efectos las actuaciones que le dieron inicio','Se considera aceptada la sanción propuesta al importador','La mercancía pasa de manera definitiva a ser del fisco','El plazo se amplía automáticamente a seis meses más'],e:'Art. 153 LA. En clase se comparó con las 72 horas del Ministerio Público: si se pasan, se violentan derechos.'},
+{m:7,q:'Si el embargo es por clasificación arancelaria, el interesado puede pedir:',o:['Una junta técnica consultiva, que se realiza en 3 días hábiles','Un amparo directo para suspender la resolución del caso','La opción a pago prevista para el despacho de pasajeros','El abandono expreso de la mercancía embargada'],e:'Debe solicitarse dentro del plazo de la audiencia (art. 150 LA).'},
+{m:7,q:'Las causas del embargo precautorio están en el artículo:',o:['151','35','90','176'],e:'El art. 151 enumera las causales (fracciones I a VIII). El 152 pertenece al procedimiento y las infracciones inician en el 176.'},
+{m:7,q:'La fracción I del artículo 151 se refiere a:',o:['Introducir mercancías por lugar no autorizado','Mercancía excedente o no declarada','Valor declarado menor en 50 % o más','Datos falsos o inexistentes del proveedor'],e:'También incluye desviar las mercancías de las rutas fiscales en tránsito.'},
+{m:7,q:'Mercancía prohibida o con regulaciones no arancelarias sin acreditar su cumplimiento es causal de embargo en la fracción:',o:['II','I','V','VII'],e:'Fracc. II: mercancía prohibida o con RRNA sin acreditar cumplimiento, u omisión de cuotas compensatorias.'},
+{m:7,q:'Una mercancía excedente o no declarada genera embargo cuando supera:',o:['10 % del valor declarado','5 % del valor declarado','25 % del valor declarado','50 % del valor declarado'],e:'Umbral de 10 % (art. 151, fracc. IV). El umbral de 50 % corresponde a la subvaluación (fracc. VII).'},
+{m:7,q:'Un vehículo de carga que entra al recinto fiscal con mercancía de importación sin pedimento cae en la fracción:',o:['V','III','IV','II'],e:'La fracción V no se vio en clase; es la de carga sin pedimento.'},
+{m:7,q:'Declarar un domicilio de proveedor o importador falso o inexistente es causal de embargo en la fracción:',o:['VI','IV','VII','I'],e:'Fracc. VI: datos falsos o inexistentes de nombre, razón social o domicilio, o proveedor que no se localiza. Ejemplo de clase: pedir un paquete con dirección falsa.'},
+{m:7,q:'Declarar un valor inferior en 50 % o más al de mercancías idénticas o similares es la causal de la fracción:',o:['VII','VI','IV','VIII'],e:'Fracc. VII (subvaluación), con base en los arts. 72 y 73 LA. Cambia a partir de 2027.'},
+{m:7,q:'La fracción VIII del artículo 151, nueva desde 2026, se refiere a:',o:['Importación temporal que no se dirige o no se localiza en el domicilio registrado','Carga que entra al recinto fiscal sin el pedimento correspondiente','Valor declarado menor en 50 % al de mercancía similar','Introducción de mercancía por un lugar no autorizado'],e:'Agregada por la reforma del DOF del 19-11-2025, en vigor desde el 1 de enero de 2026. No se vio en clase.'},
+{m:7,q:'En pasajeros, cuando la causal es no acreditar la legal estancia (fracc. III), el embargo procede sobre:',o:['La mercancía no declarada y el vehículo de servicio particular','Únicamente el equipaje de mano del pasajero','Únicamente el dinero en efectivo que lleve consigo','El boleto del transporte con el que viajó'],e:'Ejemplo de clase: 20 playeras de marca compradas en EE. UU. o el caso de los autos.'},
+{m:7,q:'Según la reforma aprobada en octubre de 2026, desde el 1 de enero de 2027:',o:['Se elimina el umbral de 50 % para embargar por subvaluación','Desaparece el PAMA y se sustituye por una multa','El semáforo fiscal pasa a operarse de forma manual','Se suspenden todos los regímenes temporales'],e:'Aprobada por el Senado el 13-oct-2026 y enviada al Ejecutivo; hasta el 4-nov-2026 no se encontró su publicación en el DOF.'},
+{m:7,q:'En la reforma aprobada, el otro umbral para presumir infracción baja de 50 % a:',o:['20 % en ciertos supuestos','10 % en todos los casos','5 % en importaciones temporales','30 % solo en pasajeros'],e:'También se precisan las garantías para sustituir el embargo y suben las multas por hidrocarburos y petrolíferos (50 % a 100 % del valor comercial).'},
+{m:7,q:'La sustitución del embargo por garantía se regula en el artículo:',o:['154','151','155','150'],e:'Art. 154 LA: garantías del CFF; en la fracc. VII solo con depósito en cuentas aduaneras de garantía.'},
+{m:7,q:'Cuando no hay embargo ni contribuciones omitidas, la autoridad:',o:['Determina la multa sin necesidad de PAMA','Abre de todos modos un PAMA completo','Cancela la patente del agente aduanal','Devuelve la mercancía y no impone multa'],e:'Art. 152, último párrafo, LA.'},
+{m:7,q:'MOA significa:',o:['Manual de Operación Aduanera','Modelo de Organización Aduanera','Manual de Obligaciones Aduaneras','Marco Operativo Aduanero'],e:'Es un documento operativo de la ANAM; la versión consultada es de mayo de 2022 y está en proceso de actualización.'},
+{m:7,q:'El MOA es un documento de la ANAM que:',o:['Describe cómo actúa el personal aduanero en cada proceso','Fija las tasas del IGI que aplica a cada fracción','Establece las NOM que debe cumplir cada producto','Define los regímenes aduaneros del artículo 90'],e:'Cada proceso trae objetivo, alcance, normatividad aplicable, glosario, diagrama de flujo y detalle paso a paso.'},
+{m:7,q:'Según lo explicado en clase, el MOA busca principalmente que:',o:['Todas las aduanas funcionen igual, sin depender del jefe en turno','Cada jefe de aduana fije los procedimientos que prefiera','Se cobren copias y trámites adicionales a los usuarios','Se elimine el PAMA de las aduanas del país'],e:'Frase de clase: todo lo que se vio de la estructura de las aduanas viene en función del MOA.'},
+{m:7,q:'Una ventaja del MOA es que aporta:',o:['Seguridad jurídica, eficiencia y transparencia','Aranceles más bajos en todas las fracciones','Exención del PAMA a importadores frecuentes','Libre comercio sin ningún permiso'],e:'Ejemplo de transparencia: si el MOA no prevé un cobro (como 50 pesos por copias), no se cobra. También aporta cumplimiento normativo.'},
+{m:7,q:'El PAMA se encuentra en el MOA dentro del capítulo de:',o:['Actos y procedimientos legales','Despacho aduanero','Actuaciones previas al despacho','Compilación de beneficios'],e:'Capítulo 4. Incluye, entre otros, abandono de mercancía en pasajeros, contrabando en pasajeros y PAMA en despacho de pasajeros.'},
+{m:7,q:'Para saber cómo actuar y evitar un PAMA, en clase se recomendó:',o:['Consultar el MOA y guardar todas las facturas','Pagar siempre las contribuciones en efectivo','No declarar la mercancía de poco valor','Cambiar de aduana cada vez que se importe'],e:'Si una aduana pide algo que el MOA no prevé, el MOA permite defenderse.'},
+{m:7,q:'Según el MOA (versión de mayo de 2022), la opción a pago en pasajeros aplica cuando:',o:['Solo hay omisión de contribuciones, hasta 3,000 dólares, sin RRNA','Hay mercancía prohibida de cualquier valor declarado','Hay datos falsos en la declaración del pasajero','La omisión supera el umbral del delito de contrabando'],e:'El pasajero paga contribuciones y multa y se lleva su mercancía; no debe haber causal de embargo. Los montos son de la versión 2022 del MOA; verifica su actualización.'}
+];
+var LET=['A','B','C','D'];
+var view=document.getElementById('view');
+var S;
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function seq(n){var r=[];for(var i=0;i<n;i++)r.push(i);return r}
+function start(order){S={order:order,pos:0,score:0,log:[],cur:null,done:false};prepare();render()}
+function prepare(){var q=Q[S.order[S.pos]];var idx=shuffle(seq(q.o.length));S.cur={opts:idx.map(function(i){return{text:q.o[i],right:i===0}}),picked:-1}}
+function el(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n}
+function render(){
+  view.textContent='';
+  if(S.done){return results()}
+  var q=Q[S.order[S.pos]],c=S.cur,n=Q.length;
+  var meter=el('div','meter');
+  var meta=el('div','meta');
+  var l=el('span');l.appendChild(document.createTextNode('Pregunta '));l.appendChild(el('b',null,String(S.pos+1)));l.appendChild(document.createTextNode(' de '+S.order.length));
+  var r=el('span');r.appendChild(document.createTextNode('Aciertos '));r.appendChild(el('b',null,String(S.score)));
+  meta.appendChild(l);meta.appendChild(r);
+  var bar=el('div','bar');var fill=el('i');fill.style.width=Math.round(S.pos/S.order.length*100)+'%';bar.appendChild(fill);
+  meter.appendChild(meta);meter.appendChild(bar);
+  var card=el('section','card');
+  card.appendChild(el('span','mod',MODS[q.m]));
+  card.appendChild(el('h2','q',q.q));
+  var ul=el('ul','opts');
+  c.opts.forEach(function(o,i){
+    var li=el('li');var b=el('button','opt');b.type='button';b.id='opt'+i;
+    b.appendChild(el('span','k',LET[i]));b.appendChild(el('span','t',o.text));
+    b.addEventListener('click',function(){pick(i)});
+    li.appendChild(b);ul.appendChild(li)
+  });
+  card.appendChild(ul);
+  var fbBox=el('div');fbBox.id='fb';fbBox.setAttribute('aria-live','polite');card.appendChild(fbBox);
+  card.appendChild(el('p','hint','Toca una opción. También puedes usar las teclas A, B, C y D, y Enter para continuar.'));
+  view.appendChild(meter);view.appendChild(card);
+  if(c.picked>=0)paint();
+}
+function pick(i){
+  if(S.cur.picked>=0)return;
+  S.cur.picked=i;var o=S.cur.opts[i];
+  if(o.right)S.score++;
+  var q=Q[S.order[S.pos]];
+  var right=S.cur.opts.filter(function(x){return x.right})[0].text;
+  S.log.push({qi:S.order[S.pos],ok:o.right,you:o.text,right:right});
+  paint();
+}
+function paint(){
+  var c=S.cur,q=Q[S.order[S.pos]];
+  c.opts.forEach(function(o,i){
+    var b=document.getElementById('opt'+i);if(!b)return;
+    b.disabled=true;
+    var tag=null;
+    if(o.right){b.classList.add('ok');tag='Correcta'}
+    else if(i===c.picked){b.classList.add('bad');tag='Tu respuesta'}
+    else b.classList.add('dim');
+    if(tag)b.appendChild(el('span','tag',(o.right?'✓ ':'✗ ')+tag));
+  });
+  var good=c.opts[c.picked].right;
+  var fb=document.getElementById('fb');fb.textContent='';
+  var box=el('div','fb '+(good?'ok':'bad'));
+  box.appendChild(el('strong',null,good?'¡Correcto!':'Incorrecto'));
+  box.appendChild(el('p',null,q.e));
+  fb.appendChild(box);
+  var last=S.pos===S.order.length-1;
+  var nx=el('button','next',last?'Ver resultado':'Siguiente');nx.type='button';nx.id='next';
+  nx.addEventListener('click',next);
+  fb.appendChild(nx);
+  nx.focus({preventScroll:true});
+  box.scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+function next(){
+  if(S.pos>=S.order.length-1){S.done=true;save();render();window.scrollTo(0,0);return}
+  S.pos++;prepare();render();window.scrollTo(0,0)
+}
+function save(){try{var k='aduanero-quiz-p2-mejor';var prev=parseInt(localStorage.getItem(k)||'0',10);if(S.score>prev&&S.order.length===Q.length)localStorage.setItem(k,String(S.score))}catch(e){}}
+function best(){try{return parseInt(localStorage.getItem('aduanero-quiz-p2-mejor')||'0',10)}catch(e){return 0}}
+function results(){
+  var n=S.order.length,pct=Math.round(S.score/n*100);
+  var card=el('section','card');
+  card.appendChild(el('span','mod','Resultado'));
+  var sc=el('div','score');sc.appendChild(document.createTextNode(S.score+' '));sc.appendChild(el('small',null,'de '+n+' · '+pct+' %'));
+  card.appendChild(sc);
+  var b=best();
+  var msg=pct>=90?'Dominas el tema.':pct>=70?'Vas bien; repasa las que fallaste.':'Todavía hay huecos. Repite las falladas y vuelve a intentarlo.';
+  card.appendChild(el('p',null,msg+(b?' Mejor marca en el examen completo: '+b+' de '+Q.length+'.':'')));
+  var by={};S.log.forEach(function(x){var m=Q[x.qi].m;by[m]=by[m]||{ok:0,t:0};by[m].t++;if(x.ok)by[m].ok++});
+  var g=el('div','bymod');
+  Object.keys(by).forEach(function(m){var d=el('div');d.appendChild(el('span',null,MODS[m]));d.appendChild(el('b',null,by[m].ok+'/'+by[m].t));g.appendChild(d)});
+  card.appendChild(g);
+  var wrong=S.log.filter(function(x){return!x.ok});
+  var act=el('div','res-actions');
+  if(wrong.length){var bw=el('button','primary','Repetir solo las '+wrong.length+' falladas');bw.type='button';bw.addEventListener('click',function(){start(shuffle(wrong.map(function(x){return x.qi})))});act.appendChild(bw)}
+  var ba=el('button',null,'Examen completo mezclado');ba.type='button';ba.addEventListener('click',function(){start(shuffle(seq(Q.length)))});act.appendChild(ba);
+  card.appendChild(act);
+  if(wrong.length){
+    card.appendChild(el('h2','q','Lo que fallaste'));
+    var ul=el('ul','miss');
+    wrong.forEach(function(x){
+      var li=el('li');li.appendChild(el('span','mq',Q[x.qi].q));
+      li.appendChild(el('span','you','✗ Tu respuesta: '+x.you));
+      li.appendChild(el('span','right','✓ Correcta: '+x.right));
+      li.appendChild(el('span',null,Q[x.qi].e));ul.appendChild(li)
+    });
+    card.appendChild(ul);
+  }
+  view.appendChild(card);
+}
+document.getElementById('btnShuffle').addEventListener('click',function(){start(shuffle(seq(Q.length)))});
+document.getElementById('btnRestart').addEventListener('click',function(){start(seq(Q.length))});
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey||S.done)return;
+  var k=e.key.toLowerCase(),i=['a','b','c','d'].indexOf(k);
+  if(i<0)i=['1','2','3','4'].indexOf(k);
+  if(i>=0&&S.cur.picked<0&&S.cur.opts[i]){pick(i);return}
+  if((k==='enter'||k==='arrowright')&&S.cur.picked>=0){var nx=document.getElementById('next');if(nx&&document.activeElement!==nx){e.preventDefault();next()}}
+});
+start(seq(Q.length));
+})();
+</script>
+</body>
+</html>
