@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Seven7 explicado</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column (max 1080px) of numbered chapters; data shown as inline bars and tables, decision areas as tabs */
+:root{
+  --bg:#0A1020; --panel:#111A2E; --line:#22314F; --fg:#E8EEF7; --muted:#9FB0C8; --accent:#2DD4E8; --warm:#F59E0B; --good:#34D399; --bad:#F87171;
+  --chip:#0E2A33; --warmchip:#2A2113;
+  --display:'Space Grotesk', Arial, sans-serif; --body:'Inter', Arial, sans-serif; --mono:'JetBrains Mono', 'Courier New', monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--bg:#F4F7FB;--panel:#FFFFFF;--line:#D5DEEA;--fg:#0B1324;--muted:#4A5872;--accent:#0E7490;--warm:#B45309;--good:#047857;--bad:#B91C1C;--chip:#DDF4F8;--warmchip:#FCEFD9;color-scheme:light}}
+:root[data-theme="light"]{--bg:#F4F7FB;--panel:#FFFFFF;--line:#D5DEEA;--fg:#0B1324;--muted:#4A5872;--accent:#0E7490;--warm:#B45309;--good:#047857;--bad:#B91C1C;--chip:#DDF4F8;--warmchip:#FCEFD9;color-scheme:light}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 64px}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:72px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(44px,8vw,88px);letter-spacing:-2px}
+h2{font-size:clamp(28px,4vw,40px)}
+h3{font-size:20px}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--accent)}
+.muted{color:var(--muted)}
+.lead{font-size:19px;color:var(--muted);max-width:68ch}
+.chapter{display:flex;flex-direction:column;gap:24px}
+.chapter > .text{max-width:68ch;display:flex;flex-direction:column;gap:12px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.big{font-family:var(--display);font-size:36px;font-weight:700;font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-family:var(--mono);font-size:12px;padding:3px 10px;border-radius:999px;background:var(--chip);color:var(--accent);width:fit-content}
+.tag.w{background:var(--warmchip);color:var(--warm)}
+header.hero{padding-top:56px;display:flex;flex-direction:column;gap:20px}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px}
+nav.toc a{font-family:var(--mono);font-size:13px;color:var(--fg);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+nav.toc a:hover,nav.toc a:focus-visible{border-color:var(--accent);outline:none;color:var(--accent)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:15px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left}
+th{font-family:var(--mono);font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right}
+tr.us td{background:var(--chip);font-weight:600}
+.ok{color:var(--good);font-weight:600}.ko{color:var(--bad);font-weight:600}
+.bars{display:flex;flex-direction:column;gap:12px}
+.bar{display:grid;grid-template-columns:150px 1fr 90px;gap:12px;align-items:center}
+.bar .track{height:14px;background:var(--line);border-radius:7px;overflow:hidden}
+.bar .fill{height:100%;background:var(--accent);border-radius:7px}
+.bar .fill.w{background:var(--warm)}
+.bar .v{font-family:var(--mono);font-size:14px;text-align:right;font-variant-numeric:tabular-nums}
+.chart{display:flex;align-items:flex-end;gap:16px;height:260px;border-bottom:1px solid var(--line);padding-top:24px}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%;min-width:0}
+.pair{display:flex;align-items:flex-end;gap:6px;height:100%}
+.pair div{width:28px;border-radius:5px 5px 0 0}
+.lbl{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:14px}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tabs button{font-family:var(--mono);font-size:13px;background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.panel{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.panel .card h3{font-size:16px;font-family:var(--mono);color:var(--accent);letter-spacing:1px;text-transform:uppercase}
+dl.gl{display:grid;grid-template-columns:minmax(160px,220px) 1fr;gap:12px 24px;margin:0}
+dl.gl dt{font-weight:600}dl.gl dd{margin:0;color:var(--muted)}
+.callout{border:1px solid var(--warm);background:var(--warmchip);border-radius:14px;padding:18px 20px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--mono);font-size:13px}
+.flow span{border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--panel)}
+.flow b{color:var(--accent)}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:20px}
+@media (max-width:560px){.bar{grid-template-columns:96px 1fr 72px}.pair div{width:16px}dl.gl{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:no-preference){.fill{transition:width .6s ease}}
+</style>
+
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <p class="eyebrow">InterPyme · Equipo 3 · Periodo 2 de 3</p>
+  <h1>Seven7 explicado</h1>
+  <p class="lead">Todo lo que hay que saber de nuestra empresa en el simulador: cómo se gana, qué decidimos, qué pasó y por qué. Cada número viene del Cuadro de mando del simulador, revisado el 10 de noviembre de 2026.</p>
+  <div class="grid">
+    <div class="card"><span class="muted">Valor de Compañía</span><span class="big">3.804</span><span class="tag">3º del grupo · a 10 puntos del 1º</span></div>
+    <div class="card"><span class="muted">Ingresos 2027</span><span class="big">11,72M</span><span class="tag">+62% contra 2026</span></div>
+    <div class="card"><span class="muted">Resultado de operación</span><span class="big">3,26M</span><span class="tag">×3 contra 2026</span></div>
+    <div class="card"><span class="muted">Ingresos de fuera de México</span><span class="big">64%</span><span class="tag">meta del plan: 15%</span></div>
+  </div>
+  <nav class="toc" aria-label="Capítulos">
+    <a href="#juego">El juego</a><a href="#valor">Cómo se gana</a><a href="#historia">Nuestra historia</a><a href="#plan">El plan</a><a href="#decisiones">Cada decisión</a><a href="#mercados">Mercados</a><a href="#competencia">Competencia</a><a href="#aprendizajes">Lo que aprendimos</a><a href="#glosario">Glosario</a>
+  </nav>
+</header>
+
+<section class="chapter" id="juego">
+  <p class="eyebrow">El juego</p>
+  <h2>Qué es InterPyme y qué es Seven7</h2>
+  <div class="text">
+    <p>InterPyme es un simulador de negocios. Cinco empresas mexicanas que hacen <b>conservas de frutas y verduras</b> compiten en el mismo mercado: Fruits, Natur, TeamPy, Seven7 (nosotros) y Accion. Todas empezaron en 2024 iguales, con 3.300 puntos.</p>
+    <p>Cada "decisión" es un año. Capturamos en la web cuánto producir, a qué precio vender, cuánto gastar en promoción, a qué país entrar y cómo capacitar al personal. El simulador calcula qué pasó y da un puntaje a cada empresa.</p>
+  </div>
+  <div class="flow" aria-label="Calendario">
+    <span>2024–2025 · historia inicial</span><b>→</b><span>1ª decisión · año 2026</span><b>→</b><span>2ª decisión · año 2027</span><b>→</b><span>3ª decisión · año 2028 · cierra 7 dic</span>
+  </div>
+</section>
+
+<section class="chapter" id="valor">
+  <p class="eyebrow">Cómo se gana</p>
+  <h2>El Valor de Compañía tiene cinco partes</h2>
+  <div class="text">
+    <p>El ranking no mide solo dinero. El simulador suma cinco componentes y multiplica el total por el factor <b>"No Decisión"</b>: 1,00 si llenaste todo y menos si dejaste casillas vacías. Así quedamos en 2027 (el peso es el promedio del simulador):</p>
+  </div>
+  <div class="card">
+    <div class="bars" id="vcbars"></div>
+    <p class="muted" style="font-size:14px">Suma: 3.804 × factor 1,00 = 3.804 puntos. A TeamPy, en 2026, dejar en 0 la promoción de México y la tecnología le bajó el factor a 0,98: unos 73 puntos menos.</p>
+  </div>
+</section>
+
+<section class="chapter" id="historia">
+  <p class="eyebrow">Nuestra historia</p>
+  <h2>De 6 a 11,7 millones en ingresos</h2>
+  <div class="card">
+    <div class="legend"><span><i class="sw" style="background:var(--accent)"></i>Ingresos</span><span><i class="sw" style="background:var(--warm)"></i>Resultado de operación</span></div>
+    <div class="chart" id="hist" role="img" aria-label="Ingresos y resultado 2024 a 2027"></div>
+  </div>
+  <div class="grid">
+    <div class="card"><span class="tag w">2026 · 1ª decisión</span><p>Entramos a <b>Perú</b>. Los ingresos subieron a 7,25M, pero la ganancia bajó a 1,06M: los costos crecieron más rápido que las ventas y el margen bruto cayó a 33%.</p></div>
+    <div class="card"><span class="tag">2027 · 2ª decisión</span><p>Entramos a <b>EEUU</b>. Los ingresos subieron 62% y la ganancia se triplicó a 3,26M. El margen bruto subió a 43%, el más alto de las cinco empresas.</p></div>
+    <div class="card"><span class="tag">Valor de Compañía</span><p>3.300 → 3.509 → 3.744 → 3.804. En el ranking pasamos del 2º al 4º lugar del servidor, porque los rivales subieron más rápido.</p></div>
+  </div>
+</section>
+
+<section class="chapter" id="plan">
+  <p class="eyebrow">El plan</p>
+  <h2>Prometimos seis metas y superamos las seis</h2>
+  <div class="text"><p>Antes de la 1ª decisión hicimos un Plan de Actuación: México como mercado principal, Perú como primer país, calidad a precios accesibles y producir más para bajar costos.</p></div>
+  <div class="scroll"><table>
+    <thead><tr><th>Indicador</th><th class="n">Inicio</th><th class="n">Meta</th><th class="n">Real 2027</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td>Unidades vendidas</td><td class="n">198.700</td><td class="n">288.115</td><td class="n">342.552</td><td class="ok">Cumple</td></tr>
+      <tr><td>Ingresos</td><td class="n">6.212.860</td><td class="n">9.008.647</td><td class="n">11.720.970</td><td class="ok">Cumple</td></tr>
+      <tr><td>Ingresos internacionales</td><td class="n">0%</td><td class="n">15%</td><td class="n">64%</td><td class="ok">Cumple</td></tr>
+      <tr><td>Ocupación de fábrica</td><td class="n">51,9%</td><td class="n">75,3%</td><td class="n">95,9%</td><td class="ok">Cumple</td></tr>
+      <tr><td>Modelo de Gestión de Calidad</td><td class="n">2,4</td><td class="n">3,5</td><td class="n">4,1</td><td class="ok">Cumple</td></tr>
+      <tr><td>Resultados</td><td class="n">1.468.587</td><td class="n">2.129.451</td><td class="n">3.221.087</td><td class="ok">Cumple</td></tr>
+    </tbody>
+  </table></div>
+  <p class="callout">Nos salimos del plan en una cosa grande: <b>entramos a EEUU</b>, que no estaba previsto. Fue lo que más nos hizo crecer.</p>
+</section>
+
+<section class="chapter" id="decisiones">
+  <p class="eyebrow">Cada decisión</p>
+  <h2>Qué controla cada pantalla del simulador</h2>
+  <div class="text"><p>Elige un área. Cada una explica qué es, qué decidimos, qué pasó y qué aprendimos.</p></div>
+  <div class="tabs" role="tablist" aria-label="Áreas de decisión" id="tabs"></div>
+  <div class="panel" id="panel" role="tabpanel"></div>
+</section>
+
+<section class="chapter" id="mercados">
+  <p class="eyebrow">Mercados</p>
+  <h2>Dónde vendemos y cómo nos fue</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Mercado</th><th class="n">Unidades 2026</th><th class="n">Unidades 2027</th><th class="n">Ingresos 2027</th><th class="n">Marca (frutas/verduras)</th><th>Veredicto</th></tr></thead>
+    <tbody>
+      <tr><td>México</td><td class="n">155.110</td><td class="n">134.371</td><td class="n">4,22M</td><td class="n">40 / 35</td><td>Regular: líderes en marca, menos volumen</td></tr>
+      <tr><td>EEUU</td><td class="n">—</td><td class="n">159.030</td><td class="n">5,83M</td><td class="n">23 / 23</td><td class="ok">Bien: el doble de lo estimado</td></tr>
+      <tr><td>Perú</td><td class="n">72.820</td><td class="n">49.151</td><td class="n">1,67M</td><td class="n">28 / 29</td><td class="ko">Mal: nos faltó producto</td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid">
+    <div class="card"><h3>Por qué bajaron México y Perú</h3><p class="muted">La fábrica de frutas trabajó al 99%. Vendimos todo lo que hicimos y EEUU se llevó el producto que antes iba a los otros dos mercados.</p></div>
+    <div class="card"><h3>Por qué bajó la marca</h3><p class="muted">La marca total es un promedio ponderado por ingresos. EEUU ya es la mitad de lo que vendemos y ahí arrancamos con marca 23, así que el promedio bajó de 33 a 30.</p></div>
+    <div class="card"><h3>Dónde hay espacio</h3><p class="muted">En EEUU hay 1,15 millones de frutas de demanda efectiva y todas las empresas juntas solo atendieron 47%.</p></div>
+  </div>
+</section>
+
+<section class="chapter" id="competencia">
+  <p class="eyebrow">Competencia</p>
+  <h2>Tres empresas en 10 puntos</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Empresa</th><th class="n">Valor Compañía</th><th class="n">Ingresos</th><th class="n">Resultado</th><th class="n">Cuota</th><th class="n">Margen bruto</th><th class="n">Calidad (1–7)</th></tr></thead>
+    <tbody>
+      <tr><td>TeamPy</td><td class="n">3.814</td><td class="n">12,46M</td><td class="n">3,05M</td><td class="n">23,7%</td><td class="n">38%</td><td class="n">4,3</td></tr>
+      <tr><td>Accion</td><td class="n">3.807</td><td class="n">8,64M</td><td class="n">2,14M</td><td class="n">16,7%</td><td class="n">39%</td><td class="n">4,5</td></tr>
+      <tr class="us"><td>Seven7</td><td class="n">3.804</td><td class="n">11,72M</td><td class="n">3,26M</td><td class="n">22,9%</td><td class="n">43%</td><td class="n">4,1</td></tr>
+      <tr><td>Natur</td><td class="n">3.659</td><td class="n">12,43M</td><td class="n">3,44M</td><td class="n">25,1%</td><td class="n">37%</td><td class="n">3,5</td></tr>
+      <tr><td>Fruits</td><td class="n">2.870</td><td class="n">5,40M</td><td class="n">1,60M</td><td class="n">11,5%</td><td class="n">43%</td><td class="n">0,0</td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid">
+    <div class="card"><span class="tag">Ganamos en</span><p>Margen bruto (43%), Valor de Producto (592 puntos, el más alto) y Resultados del Valor de Compañía (1.573).</p></div>
+    <div class="card"><span class="tag w">Perdemos en</span><p>Calidad: 970 puntos contra 1.010 de Accion. La satisfacción de sus empleados es más alta (TeamPy 96, nosotros 82).</p></div>
+  </div>
+</section>
+
+<section class="chapter" id="aprendizajes">
+  <p class="eyebrow">Lo que aprendimos</p>
+  <h2>Cinco lecciones para la 3ª decisión</h2>
+  <div class="grid">
+    <div class="card"><span class="tag">1</span><h3>Producir de más es mejor que quedarse corto</h3><p class="muted">Vendimos todo. Dejamos de vender en México y Perú por falta de producto.</p></div>
+    <div class="card"><span class="tag">2</span><h3>No hay topes en el Valor de Compañía</h3><p class="muted">Accion sacó 1.010 en Calidad y nosotros 1.573 en Resultados. Siempre se puede subir.</p></div>
+    <div class="card"><span class="tag">3</span><h3>El sistema de calidad se acumula</h3><p class="muted">Los puntos de 2026 se sumaron a los de 2027. Hay que llenarlo cada año.</p></div>
+    <div class="card"><span class="tag">4</span><h3>La marca nueva arranca en 23</h3><p class="muted">Abrir un país baja el promedio de marca. En el último año ya no conviene abrir otro.</p></div>
+    <div class="card"><span class="tag">5</span><h3>Casillas vacías cuestan puntos</h3><p class="muted">Un factor de 0,98 equivale a perder unos 73 puntos.</p></div>
+  </div>
+</section>
+
+<section class="chapter" id="glosario">
+  <p class="eyebrow">Glosario</p>
+  <h2>Las palabras del simulador</h2>
+  <dl class="gl">
+    <dt>Valor de Compañía</dt><dd>El puntaje del ranking: suma de cinco componentes por el factor No Decisión.</dd>
+    <dt>Demanda efectiva</dt><dd>Clientes interesados hoy en comprar. La demanda potencial es a cuántos podrías llegar en el futuro.</dd>
+    <dt>Descuento al canal</dt><dd>Lo que se queda la tienda. Ingreso = unidades × precio × (1 − descuento).</dd>
+    <dt>Cobertura</dt><dd>En qué parte de las tiendas está nuestro producto.</dd>
+    <dt>Segmentos</dt><dd>Ahorradores, Familias y Healthy. Se reparten 21 puntos de prioridad por mercado.</dd>
+    <dt>Costos de no calidad</dt><dd>Lo que cuestan los errores: devoluciones, producto mal envasado, almacenaje y materia prima.</dd>
+    <dt>Margen bruto</dt><dd>Ingresos menos costos de fabricar y entregar, como porcentaje de los ingresos.</dd>
+    <dt>Modelo de Gestión de Calidad</dt><dd>Escala de 1 a 7 que junta tecnología, digitalización, condiciones laborales, capacidad de la organización, sistema de calidad y satisfacción del empleado.</dd>
+    <dt>Factor No Decisión</dt><dd>Multiplicador del Valor de Compañía: 1,00 si llenaste todas las decisiones.</dd>
+  </dl>
+</section>
+
+<footer>Fuente: simulador CompanyGame (InterPyme), Cuadro de mando de Seven7 · Equipo InterPyme 3.</footer>
+</div>
+
+<script>
+(function(){
+  var vc=[["Resultados económicos",1573,"36,6%"],["Modelo de calidad",970,"21,7%"],["Innovación de producto",592,"12,5%"],["Internacionalización",336,"8,2%"],["Valor de marca",333,"8,1%"]];
+  var max=1600, el=document.getElementById('vcbars');
+  vc.forEach(function(r){
+    var d=document.createElement('div'); d.className='bar';
+    d.innerHTML='<span>'+r[0]+' <span class="muted" style="font-size:12px">· '+r[2]+'</span></span><div class="track"><div class="fill" style="width:'+(r[1]/max*100).toFixed(1)+'%"></div></div><span class="v">'+r[1].toLocaleString('es-MX')+'</span>';
+    el.appendChild(d);
+  });
+  var h=[["2024",6.09,1.22],["2025",6.21,1.48],["2026",7.25,1.06],["2027",11.72,3.26]], c=document.getElementById('hist'), top=12;
+  h.forEach(function(r){
+    var col=document.createElement('div'); col.className='col';
+    col.innerHTML='<div class="pair"><div style="height:'+(r[1]/top*100)+'%;background:var(--accent)" title="Ingresos '+r[1]+'M"></div><div style="height:'+(r[2]/top*100)+'%;background:var(--warm)" title="Resultado '+r[2]+'M"></div></div><span class="lbl">'+r[0]+' · '+String(r[1]).replace('.',',')+'M / '+String(r[2]).replace('.',',')+'M</span>';
+    c.appendChild(col);
+  });
+  var areas={
+    "Mercados":[["Qué es","Elegir a qué país entrar. Solo uno por año y no se puede deshacer. Cada país cobra gastos generales: EEUU 125.000, Perú 75.000, España 105.000."],["Qué decidimos","2026: Perú. 2027: EEUU, porque había 528.577 frutas de demanda sin atender."],["Qué pasó","EEUU dio 5,83M, la mitad de nuestros ingresos. La marca ahí arrancó en 23."],["Lección","Entrar a un país grande hace crecer las ventas, pero baja la marca el primer año."]],
+    "Producto":[["Qué es","Calidad de la materia prima (proveedor 90 a 93), nivel de envasado (1 a 7) y packaging (1 a 5)."],["Qué decidimos","Proveedor 91/92, envasado 3/4 y packaging 3/3 (antes 2/2)."],["Qué pasó","El Valor de Producto subió de 6,3 a 8,3 y el packaging 3 no costó más que el 2."],["Lección","Mejorar el empaque fue la forma más barata de ganar puntos."]],
+    "Producción":[["Qué es","Cuántas unidades fabricar, si ampliar la fábrica (22 por unidad de frutas, 34 de verduras) y cuánto invertir en tecnología."],["Qué decidimos","235.000 frutas y 92.000 verduras, sin ampliar. Tecnología 89.000."],["Qué pasó","La fábrica de frutas trabajó al 99% y se acabó el producto. La tecnología subió del nivel 6 al 9."],["Lección","Producir al máximo y ampliar cuando la demanda supera lo que fabricamos."]],
+    "Precio":[["Qué es","Precio por unidad en cada mercado. Los precios de referencia son México 37/48, EEUU 46/59, Perú 39/51."],["Qué decidimos","México 37/48, Perú 39/51 y EEUU 45/58, un poco abajo para entrar."],["Qué pasó","Vendimos todo lo que produjimos y el margen bruto llegó a 43%."],["Lección","Bajar precio no hacía falta: el límite fue la producción, no la demanda."]],
+    "Promoción":[["Qué es","Dinero para construir la marca en cada mercado y producto (0 a 200.000)."],["Qué decidimos","695.000 en total: México 170.000/95.000, Perú 135.000/75.000, EEUU 125.000/95.000."],["Qué pasó","Perú subió de 23 a 28/29 de marca. México frutas se quedó en 40."],["Lección","La promoción rinde más donde la marca está baja."]],
+    "Canal y segmentos":[["Qué es","Descuento que se le da a la tienda (5% a 40%) y prioridad para cada segmento (21 puntos por mercado)."],["Qué decidimos","Descuento 22% México, 20% Perú, 25% EEUU. Segmentos 6-9-6, 7-8-6 y 7-8-6."],["Qué pasó","Natur vendió más en EEUU con 25% que TeamPy con 28%: más descuento no garantiza más ventas."],["Lección","Repartir prioridad según dónde queda demanda sin atender."]],
+    "Organización":[["Qué es","Capacitación (hasta 40.000), prioridad por área y puntos del sistema de calidad (15 por año)."],["Qué decidimos","Capacitación 40.000, áreas 2-5-3-4-4-3-4 y calidad 2-2-1-1-2-3-3-1."],["Qué pasó","La satisfacción del empleado subió de 56,8 a 82,3. Gestión de equipos y Cultura de calidad siguen bajando."],["Lección","La calidad es donde más puntos nos faltan contra Accion y TeamPy."]],
+    "Consultor":[["Qué es","Informes de 2.500 cada uno con datos de los rivales. Llegan al año siguiente."],["Qué decidimos","7 informes en 2027 (17.500)."],["Qué pasó","Marca, ingresos, tecnología y capacidades salieron bien; promoción y segmentos salieron vacíos o desacomodados."],["Lección","Comprar solo lo que no sale gratis en el Cuadro de mando."]]
+  };
+  var tabs=document.getElementById('tabs'), panel=document.getElementById('panel'), names=Object.keys(areas);
+  function show(n){
+    Array.prototype.forEach.call(tabs.children,function(b){b.setAttribute('aria-selected',b.textContent===n?'true':'false')});
+    panel.innerHTML=areas[n].map(function(x){return '<div class="card"><h3>'+x[0]+'</h3><p>'+x[1]+'</p></div>'}).join('');
+  }
+  names.forEach(function(n,i){var b=document.createElement('button');b.type='button';b.id='tab-'+i;b.setAttribute('role','tab');b.textContent=n;b.onclick=function(){show(n)};tabs.appendChild(b)});
+  show(names[0]);
+})();
+</script>
+
+</body>
+</html>
