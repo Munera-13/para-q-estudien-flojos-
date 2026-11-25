@@ -174,6 +174,27 @@ figure.ev figcaption b{color:var(--ink-strong)}
 .proof{font:600 .82rem var(--f-body);color:var(--lilac);text-decoration:none;border-bottom:1px dashed currentColor}
 .seal{display:flex;gap:10px;align-items:center;background:var(--mint-soft);border-radius:14px;padding:12px 14px;font-size:.92rem}
 .seal b{color:var(--ink-strong)}
+/* Pedimento */
+.ped-key{display:flex;flex-wrap:wrap;gap:8px;font-size:.82rem}
+.ped-key span{padding:6px 10px;border-radius:999px;font-weight:600;color:var(--ink-strong)}
+.k-of{background:var(--mint-soft)} .k-ej{background:var(--lemon-soft)} .k-nt{background:var(--line)}
+.ped{border:1.5px solid var(--line);border-radius:18px;overflow:hidden;background:var(--surface)}
+.ped-top{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;justify-content:space-between;padding:14px 18px;background:var(--ink-strong);color:var(--bg)}
+.ped-top b{font:700 1.05rem var(--f-mono);letter-spacing:.06em}
+.ped-top span{font:600 .74rem var(--f-body);letter-spacing:.12em;text-transform:uppercase}
+.pblock{border-top:1px solid var(--line)}
+.pblock>h3{display:flex;gap:10px;align-items:center;padding:12px 18px;background:var(--bg);font-size:1.05rem}
+.pn{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font:700 .9rem var(--f-display);background:var(--pink);color:#fff;flex:none}
+.prow{display:grid;grid-template-columns:140px minmax(0,200px) minmax(0,1fr);gap:4px 14px;align-items:baseline;padding:10px 18px;border-top:1px dashed var(--line)}
+.pf{font:600 .72rem/1.35 var(--f-mono);letter-spacing:.03em;color:var(--muted);text-transform:uppercase}
+.pv{font:700 .92rem/1.35 var(--f-mono);color:var(--ink-strong);padding:4px 8px;border-radius:8px;justify-self:start;overflow-wrap:anywhere}
+.pv.of{background:var(--mint-soft)} .pv.ej{background:var(--lemon-soft)} .pv.nt{background:var(--line)}
+.prow p{font-size:.9rem;min-width:0}
+.prow p small{color:var(--muted);font-size:.78rem}
+.ped-liq{padding:4px 10px 12px;overflow-x:auto}
+.ped-liq td:first-child{font-family:var(--f-mono);font-weight:700}
+.ped-note{padding:0 18px 16px;font-size:.88rem;color:var(--muted)}
+@media (max-width:680px){.prow{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:680px){.evs{grid-template-columns:1fr}}
 @media (max-width:680px){
   .hero{grid-template-columns:1fr}
@@ -188,7 +209,7 @@ figure.ev figcaption b{color:var(--ink-strong)}
 <div class="wrap">
   <header class="hero">
     <div>
-      <div class="eyebrow">Derecho Aduanero · UVM · Ejercicio en equipo</div>
+      <div class="eyebrow">Derecho Aduanero · UVM · David Callejas Munera · Allison Arwen Tajonar Méndez · Ximena Mendoza Zea · Paola Elizabeth Baltazar Espinoza · Saúl Uriel Rodríguez Castillo</div>
       <h1>Squishies <span>desde China</span></h1>
       <p class="lead">Cómo usaría el Manual de Operación Aduanera (MOA) una empresa mexicana que quiere importar juguetes de espuma desde China: clasificación, impuestos, documentos, despacho, riesgos y una propuesta para hacerlo más rápido.</p>
       <div class="chips">
@@ -202,7 +223,7 @@ figure.ev figcaption b{color:var(--ink-strong)}
   </header>
 
   <nav class="toc" aria-label="Secciones">
-    <a href="#moa">1 · MOA</a><a href="#caso">El caso</a><a href="#clasificacion">Clasificación</a><a href="#contribuciones">Contribuciones</a><a href="#documentos">Documentos</a><a href="#despacho">Despacho</a><a href="#riesgos">Riesgos</a><a href="#propuesta">3 · Propuesta</a><a href="#preguntas">Preguntas</a><a href="#evidencia">Evidencia oficial</a>
+    <a href="#moa">1 · MOA</a><a href="#caso">El caso</a><a href="#clasificacion">Clasificación</a><a href="#contribuciones">Contribuciones</a><a href="#documentos">Documentos</a><a href="#pedimento">Pedimento</a><a href="#despacho">Despacho</a><a href="#riesgos">Riesgos</a><a href="#propuesta">3 · Propuesta</a><a href="#preguntas">Preguntas</a><a href="#evidencia">Evidencia oficial</a>
   </nav>
 
   <!-- 1. MOA -->
@@ -308,9 +329,88 @@ figure.ev figcaption b{color:var(--ink-strong)}
     <div class="nope"><span><b>No aplica:</b> certificado de origen (no hay preferencia con China)</span><span><b>No aplica:</b> Padrón de Sectores Específicos</span></div>
   </section>
 
+  <!-- Llenado de pedimento -->
+  <section id="pedimento">
+    <div class="sec-head"><span class="badge b1">D</span><div><h2>Llenado del pedimento</h2><p class="kicker">El pedimento A1 de los squishies, bloque por bloque, con las claves del Anexo 22 de las RGCE 2026</p></div></div>
+    <p>El pedimento es la declaración que el agente aduanal transmite al SAT para despachar la mercancía. Cada dato va en un campo fijo y casi todos se escriben con una clave de los apéndices del Anexo 22. Los nombres, el RFC, el barco y las cantidades son de ejemplo; las claves son las oficiales.</p>
+    <div class="ped-key"><span class="k-of">Clave oficial</span><span class="k-ej">Dato de ejemplo</span><span class="k-nt">No aplica en este caso</span></div>
+    <div class="ped">
+      <div class="ped-top"><span>Pedimento · importación definitiva</span><b>26 16 3XXX 6XXXXXX</b></div>
+
+      <div class="pblock">
+        <h3><span class="pn">1</span>Encabezado</h3>
+        <div class="prow"><span class="pf">Num. pedimento</span><b class="pv ej">26 16 3XXX 6XXXXXX</b><p>15 dígitos: año, aduana, patente del agente aduanal y número consecutivo. Lo genera el agente.</p></div>
+        <div class="prow"><span class="pf">T. oper</span><b class="pv of">IMP</b><p>Tipo de operación: importación. <small>Anexo 22, encabezado</small></p></div>
+        <div class="prow"><span class="pf">Cve. pedimento</span><b class="pv of">A1</b><p>Importación definitiva. <small>Apéndice 2</small></p></div>
+        <div class="prow"><span class="pf">Régimen</span><b class="pv of">IMD</b><p>Definitivo de importación: los squishies se quedan en México para venderse. <small>Apéndice 16</small></p></div>
+        <div class="prow"><span class="pf">Aduana E/S</span><b class="pv of">160</b><p>Manzanillo, Colima: el puerto del Pacífico donde llega el barco desde China. Por Veracruz sería 430. <small>Apéndice 1</small></p></div>
+        <div class="prow"><span class="pf">Destino</span><b class="pv of">9</b><p>Interior del país: la empresa está en Naucalpan, Estado de México. <small>Apéndice 15</small></p></div>
+        <div class="prow"><span class="pf">Tipo cambio</span><b class="pv nt">El del DOF</b><p>El que publica el Banco de México en el DOF; sirve para pasar a pesos la factura en dólares.</p></div>
+        <div class="prow"><span class="pf">Peso bruto</span><b class="pv ej">250 kg</b><p>Lo que pesan las cajas con todo y empaque.</p></div>
+        <div class="prow"><span class="pf">Valor aduana</span><b class="pv ej" id="p-va">$100,000</b><p>Precio pagado más flete y seguro hasta Manzanillo. Cambia si mueves la calculadora de contribuciones.</p></div>
+      </div>
+
+      <div class="pblock">
+        <h3><span class="pn">2</span>Datos del importador</h3>
+        <div class="prow"><span class="pf">RFC</span><b class="pv ej">JBL250312AB1</b><p>RFC de la empresa importadora. Tiene que estar inscrita en el Padrón de Importadores.</p></div>
+        <div class="prow"><span class="pf">CURP</span><b class="pv nt">No aplica</b><p>Solo se anota cuando importa una persona física. Una S.A. de C.V. no tiene CURP.</p></div>
+        <div class="prow"><span class="pf">Nombre</span><b class="pv ej">Juguetes Blanditos, S.A. de C.V.</b><p>Nombre o razón social, igual que en el RFC.</p></div>
+        <div class="prow"><span class="pf">Domicilio</span><b class="pv ej">Naucalpan, Edo. de México</b><p>El domicilio fiscal registrado ante el SAT.</p></div>
+      </div>
+
+      <div class="pblock">
+        <h3><span class="pn">3</span>Datos del proveedor extranjero</h3>
+        <div class="prow"><span class="pf">ID. fiscal</span><b class="pv ej">9144XXXXXXXXXXXXXX</b><p>Número de identificación fiscal del proveedor en China.</p></div>
+        <div class="prow"><span class="pf">Nombre</span><b class="pv ej">Shenzhen Soft Toys Co., Ltd.</b><p>El vendedor que aparece en la factura.</p></div>
+        <div class="prow"><span class="pf">Domicilio</span><b class="pv ej">Shenzhen, Guangdong, China</b><p>Domicilio del proveedor.</p></div>
+        <div class="prow"><span class="pf">Vinculación</span><b class="pv of">NO</b><p>Importador y proveedor no son empresas relacionadas. Si lo fueran, se anota «SI» y la aduana revisa que eso no haya cambiado el precio.</p></div>
+        <div class="prow"><span class="pf">P. O/D · país origen</span><b class="pv of">CHN</b><p>País donde se fabricaron los squishies. Se anota en la partida. <small>Apéndice 4</small></p></div>
+        <div class="prow"><span class="pf">P. V/C · país vendedor</span><b class="pv of">CHN</b><p>País que vende. Aquí el origen, la procedencia del embarque y el vendedor son China, por eso las tres claves coinciden. <small>Apéndice 4</small></p></div>
+      </div>
+
+      <div class="pblock">
+        <h3><span class="pn">4</span>Transporte</h3>
+        <div class="prow"><span class="pf">Medio E/S</span><b class="pv of">1</b><p>Marítimo: así entra la mercancía al país. <a class="proof" href="#ev-a22-medios">ver captura</a> <small>Apéndice 3</small></p></div>
+        <div class="prow"><span class="pf">Medio arribo / salida</span><b class="pv of">1 / 7</b><p>Llega a la aduana en barco (1) y sale de Manzanillo en camión (7, carretero) rumbo a Naucalpan. <small>Apéndice 3</small></p></div>
+        <div class="prow"><span class="pf">Identificación</span><b class="pv ej">«Pacific Star»</b><p>En transporte marítimo se anota el nombre del barco. <a class="proof" href="#ev-a22-transporte">ver captura</a></p></div>
+        <div class="prow"><span class="pf">País</span><b class="pv ej">PAN</b><p>Clave del país del medio de transporte (la bandera del barco). <small>Apéndice 4</small></p></div>
+        <div class="prow"><span class="pf">Guía / B/L · ID</span><b class="pv ej">SZX260981 · M</b><p>Número del conocimiento de embarque; «M» si es master o «H» si es house.</p></div>
+        <div class="prow"><span class="pf">Contenedor</span><b class="pv ej">ABCU1234567</b><p>Número del contenedor donde viajan las cajas.</p></div>
+        <div class="prow"><span class="pf">Transportista</span><b class="pv nt">No obligatorio</b><p>Nombre, RFC y domicilio del transportista solo se exigen en tránsitos. En una importación marítima basta con identificación y país. <a class="proof" href="#ev-a22-transporte">ver regla</a></p></div>
+      </div>
+
+      <div class="pblock">
+        <h3><span class="pn">5</span>Mercancía (partida 1)</h3>
+        <div class="prow"><span class="pf">Fracción</span><b class="pv of" id="p-frac">9503.00.93</b><p>Sale del clasificador de arriba; si cambias la forma o la edad, cambia aquí. <a class="proof" href="#ev-ligie">ver captura</a></p></div>
+        <div class="prow"><span class="pf">Descripción</span><b class="pv ej" id="p-desc">Juguete de espuma con forma de animal (squishy), sin relleno, para mayores de 3 años</b><p>Descripción comercial: tiene que permitir identificar la mercancía y coincidir con la factura.</p></div>
+        <div class="prow"><span class="pf">Met val</span><b class="pv of">1</b><p>Valor de transacción: el precio que de verdad se pagó. <small>Apéndice 11</small></p></div>
+        <div class="prow"><span class="pf">UMC · cantidad</span><b class="pv of">6 · 5,000</b><p>Unidad de medida comercial: pieza (6), como viene en la factura; 5,000 piezas de ejemplo. <small>Apéndice 7</small></p></div>
+        <div class="prow"><span class="pf">UMT · cantidad</span><b class="pv of">1 · 225</b><p>Unidad de la tarifa: la LIGIE pide kilos (1) para 9503.00.93 y .99; 225 kg netos de ejemplo. <small>Apéndice 7</small></p></div>
+        <div class="prow"><span class="pf">Valor comercial</span><b class="pv ej" id="p-vc">$90,000</b><p>Precio de la factura sin flete ni seguro. En el ejemplo el flete y el seguro son el 10 % del valor en aduana.</p></div>
+      </div>
+
+      <div class="pblock">
+        <h3><span class="pn">6</span>Contribuciones</h3>
+        <div class="ped-liq">
+          <table aria-label="Cuadro de liquidación del pedimento">
+            <thead><tr><th>Con.</th><th>Contribución</th><th>Tasa</th><th>F.P.</th><th class="r">Importe</th></tr></thead>
+            <tbody>
+              <tr><td>6</td><td>IGI · impuesto general de importación</td><td>30 %</td><td>0</td><td class="r" id="p-igi"></td></tr>
+              <tr><td>1</td><td>DTA · derecho de trámite aduanero</td><td>8 al millar</td><td>0</td><td class="r" id="p-dta"></td></tr>
+              <tr><td>3</td><td>IVA <small class="hint">sobre valor + IGI + DTA</small></td><td>16 %</td><td>0</td><td class="r" id="p-iva"></td></tr>
+              <tr><td>2</td><td>C.C. · cuotas compensatorias</td><td>No aplica</td><td>—</td><td class="r">$0</td></tr>
+              <tr class="total"><td></td><td>Total en efectivo</td><td></td><td></td><td class="r" id="p-tot"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="ped-note">Las claves de la primera columna son las del Apéndice 12 y «0» en F.P. es pago en efectivo (Apéndice 13). Las cuotas compensatorias castigan importaciones con precios de dumping: en la lista de la Secretaría de Economía, del capítulo 95 solo aparecen los globos de plástico metalizado de China (9503.00.23 y 9505.90.99, 161 %). Los squishies no están en la lista, así que no pagan cuota compensatoria. <a class="proof" href="#ev-cuotas">Ver captura de la lista</a></p>
+      </div>
+    </div>
+  </section>
+
   <!-- Despacho -->
   <section id="despacho">
-    <div class="sec-head"><span class="badge b2">D</span><div><h2>Procedimiento de despacho aduanero</h2><p class="kicker">Procesos del MOA para aduana marítima</p></div></div>
+    <div class="sec-head"><span class="badge b2">E</span><div><h2>Procedimiento de despacho aduanero</h2><p class="kicker">Procesos del MOA para aduana marítima</p></div></div>
     <div class="flow">
       <div class="step"><div><b>Compra y embarque en China</b><br><small>Factura del proveedor y conocimiento de embarque</small></div></div>
       <div class="step"><div><b>Arribo y depósito en recinto fiscalizado</b><br><small>Art. 23 de la Ley Aduanera</small></div></div>
@@ -326,13 +426,13 @@ figure.ev figcaption b{color:var(--ink-strong)}
 
   <!-- Riesgos -->
   <section id="riesgos">
-    <div class="sec-head"><span class="badge b3">E</span><div><h2>Posibles riesgos operativos</h2></div></div>
+    <div class="sec-head"><span class="badge b3">F</span><div><h2>Posibles riesgos operativos</h2></div></div>
     <div class="risks">
       <div class="risk" style="--sev:var(--bad)"><span class="lvl">Alto</span><b>Subvaluación</b><p>Declarar un precio muy bajo. Desde el 1 de enero de 2027 puede llevar a embargo precautorio (decreto DOF 23-10-2026).</p></div>
       <div class="risk" style="--sev:var(--bad)"><span class="lvl">Alto</span><b>Incumplir las NOM</b><p>Etiqueta sin advertencias o plomo fuera de la NOM-252: la mercancía no se libera.</p></div>
       <div class="risk" style="--sev:var(--lemon)"><span class="lvl">Medio</span><b>Mala clasificación</b><p>Declararlo como peluche relleno o como juguete para bebés cambia la fracción y la NOM.</p></div>
       <div class="risk" style="--sev:var(--lemon)"><span class="lvl">Medio</span><b>Personajes con marca</b><p>Squishies de personajes famosos sin licencia pueden considerarse piratería.</p></div>
-      <div class="risk" style="--sev:var(--lilac)"><span class="lvl">Revisar</span><b>Cuotas compensatorias</b><p>Hay que confirmar si la fracción tiene cuota compensatoria para China antes de comprar.</p></div>
+      <div class="risk" style="--sev:var(--good)"><span class="lvl">Verificado</span><b>Cuotas compensatorias</b><p>Revisamos la lista de la Secretaría de Economía: los squishies no tienen cuota compensatoria. Solo los globos metalizados del capítulo 95 la pagan.</p></div>
       <div class="risk" style="--sev:var(--lilac)"><span class="lvl">Operativo</span><b>Retrasos y almacenaje</b><p>Semáforo rojo o documentos incompletos alargan la estancia en el recinto.</p></div>
     </div>
   </section>
@@ -363,7 +463,7 @@ figure.ev figcaption b{color:var(--ink-strong)}
   <!-- Evidencia -->
   <section id="evidencia">
     <div class="sec-head"><span class="badge b3">✓</span><div><h2>Evidencia oficial</h2><p class="kicker">Capturas tomadas el 25 de noviembre de 2026 de las páginas oficiales. Toca cualquier imagen para abrir la fuente.</p></div></div>
-    <div class="seal"><span>Todas las fuentes son de dominios del gobierno de México: <b>diputados.gob.mx</b>, <b>anam.gob.mx</b>, <b>dof.gob.mx</b> y <b>sat.gob.mx</b>.</span></div>
+    <div class="seal"><span>Todas las fuentes son de dominios del gobierno de México: <b>diputados.gob.mx</b>, <b>anam.gob.mx</b>, <b>dof.gob.mx</b>, <b>sat.gob.mx</b> y <b>gob.mx</b>.</span></div>
     <div class="evs">
       <figure class="ev" id="ev-ligie"><a class="shot" href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LIGIE_2022.pdf#page=818" target="_blank" rel="noopener"><img src="evidencia/ligie-9503-93.jpg" alt="Captura de la LIGIE, página 818: fracciones 9503.00.93 y 9503.00.99 con impuesto de importación de 30 y nota Fracción reformada DOF 29-12-2025, antes 15"></a>
         <figcaption><b>LIGIE, página 818: 9503.00.93 y 9503.00.99 pagan 30 %</b><span>Cada fracción dice «Fracción reformada DOF 29-12-2025 (antes Imp. 15)».</span><a class="src" href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LIGIE_2022.pdf#page=818" target="_blank" rel="noopener">Abrir en diputados.gob.mx ↗</a></figcaption></figure>
@@ -379,6 +479,12 @@ figure.ev figcaption b{color:var(--ink-strong)}
         <figcaption><b>DOF, 17-04-2008: NOM-015-SCFI-2007</b><span>Información comercial, etiquetado para juguetes.</span><a class="src" href="https://dof.gob.mx/nota_detalle.php?codigo=5033112&amp;fecha=17/04/2008" target="_blank" rel="noopener">Abrir en dof.gob.mx ↗</a></figcaption></figure>
       <figure class="ev" id="ev-nom252"><a class="shot" href="https://dof.gob.mx/normasOficiales/4704/salud/salud.htm" target="_blank" rel="noopener"><img src="evidencia/dof-nom252.jpg" alt="Captura del DOF: NOM-252-SSA1-2011, juguetes y artículos escolares, límites de biodisponibilidad de metales pesados"></a>
         <figcaption><b>DOF: NOM-252-SSA1-2011</b><span>Juguetes y artículos escolares: límites de metales pesados.</span><a class="src" href="https://dof.gob.mx/normasOficiales/4704/salud/salud.htm" target="_blank" rel="noopener">Abrir en dof.gob.mx ↗</a></figcaption></figure>
+      <figure class="ev" id="ev-a22-medios"><a class="shot" href="https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rgce/anexos/Anexo22delasRGCEpara2026.pdf#page=44" target="_blank" rel="noopener"><img src="evidencia/anexo22-medios.jpg" alt="Captura del Anexo 22 de las RGCE 2026, Apéndice 3: claves de medios de transporte, 1 Marítimo, 4 Aéreo, 7 Carretero"></a>
+        <figcaption><b>Anexo 22, página 44: claves de medios de transporte</b><span>La clave 1 es marítimo y la 7 carretero. Son las que van en el bloque de transporte del pedimento.</span><a class="src" href="https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rgce/anexos/Anexo22delasRGCEpara2026.pdf#page=44" target="_blank" rel="noopener">Abrir en sat.gob.mx ↗</a></figcaption></figure>
+      <figure class="ev" id="ev-a22-transporte"><a class="shot" href="https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rgce/anexos/Anexo22delasRGCEpara2026.pdf#page=13" target="_blank" rel="noopener"><img src="evidencia/anexo22-transporte.jpg" alt="Captura del Anexo 22, página 13: los campos 1 y 2 de datos del transporte se exigen en importación marítima; en marítimo se anota el nombre de la embarcación"></a>
+        <figcaption><b>Anexo 22, página 13: datos del transporte y transportista</b><span>En importación marítima se exigen la identificación (nombre del barco) y el país; todos los campos del transportista solo en tránsitos.</span><a class="src" href="https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rgce/anexos/Anexo22delasRGCEpara2026.pdf#page=13" target="_blank" rel="noopener">Abrir en sat.gob.mx ↗</a></figcaption></figure>
+      <figure class="ev" id="ev-cuotas"><a class="shot" href="https://www.gob.mx/cms/uploads/attachment/file/1047073/Mercanc_as_sujetas_a_cuotas_compensatorias_06012026.pdf#page=20" target="_blank" rel="noopener"><img src="evidencia/se-cuotas.jpg" alt="Captura de la lista de mercancías sujetas a cuotas compensatorias de la Secretaría de Economía, página 20: globos de plástico metalizado 9503.00.23 y 9505.90.99 de China con 161 %"></a>
+        <figcaption><b>Secretaría de Economía: mercancías con cuota compensatoria (6 de enero de 2026)</b><span>Del capítulo 95 solo aparecen los globos metalizados de China. La fracción de los squishies no está.</span><a class="src" href="https://www.gob.mx/cms/uploads/attachment/file/1047073/Mercanc_as_sujetas_a_cuotas_compensatorias_06012026.pdf#page=20" target="_blank" rel="noopener">Abrir en gob.mx ↗</a></figcaption></figure>
       <figure class="ev" id="ev-anexo10"><div style="padding:18px;display:grid;gap:8px"><b>Anexo 10 de las RGCE 2026 (SAT)</b><span>Lista de mercancías que necesitan Padrón de Sectores Específicos. Buscamos la partida 95.03 y la palabra «juguete»: no aparecen, por eso basta el Padrón de Importadores general.</span><a class="src" href="https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rgce/anexos/Anexo10delasRGCEpara2026.pdf" target="_blank" rel="noopener">Abrir en sat.gob.mx ↗</a></div></figure>
     </div>
   </section>
@@ -390,9 +496,11 @@ figure.ev figcaption b{color:var(--ink-strong)}
       <li><a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LIGIE_2022.pdf" target="_blank" rel="noopener">LIGIE vigente, Cámara de Diputados</a>, capítulo 95 (reforma DOF 29-12-2025)</li>
       <li><a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LAdua.pdf" target="_blank" rel="noopener">Ley Aduanera, Cámara de Diputados</a></li>
       <li><a href="https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rgce/anexos/Anexo10delasRGCEpara2026.pdf" target="_blank" rel="noopener">Anexo 10 de las RGCE 2026, SAT</a></li>
+      <li><a href="https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rgce/anexos/Anexo22delasRGCEpara2026.pdf" target="_blank" rel="noopener">Anexo 22 de las RGCE 2026, SAT</a> (llenado del pedimento y apéndices de claves)</li>
+      <li><a href="https://www.gob.mx/cms/uploads/attachment/file/1047073/Mercanc_as_sujetas_a_cuotas_compensatorias_06012026.pdf" target="_blank" rel="noopener">Mercancías sujetas a cuotas compensatorias, Secretaría de Economía</a> (actualizada al 6 de enero de 2026)</li>
       <li><a href="https://dof.gob.mx/nota_detalle.php?codigo=5033112&fecha=17%2F04%2F2008" target="_blank" rel="noopener">NOM-015-SCFI-2007, DOF</a> · <a href="https://dof.gob.mx/normasOficiales/4704/salud/salud.htm" target="_blank" rel="noopener">NOM-252-SSA1-2011, DOF</a></li>
     </ul>
-    <p>Equipo: David Callejas Munera · <!-- agrega aquí a tu equipo --> · Derecho Aduanero, UVM. Los montos son un ejemplo.</p>
+    <p>Equipo: David Callejas Munera · Allison Arwen Tajonar Méndez · Ximena Mendoza Zea · Paola Elizabeth Baltazar Espinoza · Saúl Uriel Rodríguez Castillo. Derecho Aduanero, UVM. Los montos y nombres de empresas son un ejemplo.</p>
   </footer>
 </div>
 
@@ -413,6 +521,12 @@ figure.ev figcaption b{color:var(--ink-strong)}
     document.getElementById('ladder-f').textContent = r[0];
     document.getElementById('r-desc').textContent = r[1];
     document.getElementById('r-why').textContent = r[2];
+    // Pedimento: fracción y descripción
+    document.getElementById('p-frac').textContent = r[0];
+    const D = {animal:'Juguete de espuma con forma de animal (squishy), sin relleno, para mayores de 3 años',
+               comida:'Juguete de espuma con forma de comida (squishy), sin relleno, para mayores de 3 años',
+               bebe:'Juguete de espuma (squishy) para niños de hasta 36 meses'};
+    document.getElementById('p-desc').textContent = edad === 'bebe' ? D.bebe : D[forma];
   }
   form.addEventListener('change', upd); upd();
 
@@ -426,6 +540,13 @@ figure.ev figcaption b{color:var(--ink-strong)}
     document.getElementById('c-dta').textContent = fmt(dta);
     document.getElementById('c-iva').textContent = fmt(iva);
     document.getElementById('c-tot').textContent = fmt(tot);
+    // Pedimento: mismos montos
+    document.getElementById('p-va').textContent = fmt(v);
+    document.getElementById('p-vc').textContent = fmt(v*0.9);
+    document.getElementById('p-igi').textContent = fmt(igi);
+    document.getElementById('p-dta').textContent = fmt(dta);
+    document.getElementById('p-iva').textContent = fmt(iva);
+    document.getElementById('p-tot').textContent = fmt(tot);
     document.getElementById('c-pct').textContent = v ? 'Las contribuciones equivalen al ' + (tot/v*100).toFixed(1) + ' % del valor en aduana.' : 'Escribe un valor para calcular.';
     const bar = document.getElementById('bar'); bar.innerHTML='';
     if (tot>0) [['--pink',igi],['--lemon',dta],['--lilac',iva]].forEach(([c,x])=>{const i=document.createElement('i');i.style.background='var('+c+')';i.style.width=(x/tot*100)+'%';bar.appendChild(i)});
