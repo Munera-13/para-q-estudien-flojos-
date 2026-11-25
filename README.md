@@ -6,6 +6,7 @@ Páginas de estudio para la UVM, hechas por David Callejas.
 - `/guia-aduanero/`: guía de **Derecho Aduanero** para el segundo parcial (Unidades 6 y 7 y el módulo 6 de los apuntes). Fichas con mapa del temario, modo Escuchar (fichas en voz alta y preguntas rápidas), práctica con semáforo (opción múltiple, verdadero o falso, ordenar y relacionar) y examen de 30 preguntas calificado sobre 10.
 - `/seven7/`: **Seven7 explicado**, la empresa del Equipo InterPyme 3 en el simulador InterPyme: cómo se gana, qué decidimos, resultados 2024–2027, mercados, competencia, lecciones y glosario.
 - `/guia-a9/`: repaso de la **Actividad 9 de Derecho Aduanero** (Sistema Electrónico Aduanero, VUCEM, pedimentos, COVE, reconocimiento, documento electrónico y digital y pedimento consolidado), con las preguntas del examen del segundo parcial. Fichas, modo Escuchar, práctica con semáforo y tres exámenes: mixto, solo Actividad 9 y solo parcial 2.
+- `/moa-squishies/`: **MOA y squishies desde China**, ejercicio en equipo de Derecho Aduanero: concepto, estructura, procedimientos y actores del Manual de Operación Aduanera, clasificador de la fracción, calculadora de IGI, DTA e IVA, checklist de documentos, despacho, riesgos, propuesta y capturas de las fuentes oficiales.
 - `/` (raíz): quiz de **Derecho Aduanero**, parcial 2.
 
 Cada página es un solo archivo `index.html`, sin dependencias que instalar.

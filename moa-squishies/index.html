@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Squishies desde China</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: una columna de lectura con "cápsulas" de juguete; secciones numeradas porque siguen el orden del pizarrón (1 MOA, 2 Identifica, 3 Propuesta, preguntas). */
+:root{
+  --bg:#FBF8FC; --surface:#FFFFFF; --ink:#24203A; --muted:#625C78; --line:#E6DFEE;
+  --pink:#F47FA8; --pink-soft:#FDE6EF; --mint:#3DBE9C; --mint-soft:#DDF5EE; --lemon:#F7C948; --lemon-soft:#FDF3D3;
+  --lilac:#8E7CE6; --lilac-soft:#ECE8FC; --ink-strong:#16132A;
+  --good:#1F8A5B; --bad:#C2413A;
+  --f-display:"Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --f-body:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#17142A; --surface:#211D38; --ink:#EEEAF8; --muted:#ABA4C4; --line:#37315A;
+  --pink:#FF94BA; --pink-soft:#3A2440; --mint:#5ED6B6; --mint-soft:#1B3836; --lemon:#FFD866; --lemon-soft:#3A3322;
+  --lilac:#A897FF; --lilac-soft:#2C2752; --ink-strong:#FFFFFF; --good:#5ED6A0; --bad:#FF8A80; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#17142A; --surface:#211D38; --ink:#EEEAF8; --muted:#ABA4C4; --line:#37315A;
+  --pink:#FF94BA; --pink-soft:#3A2440; --mint:#5ED6B6; --mint-soft:#1B3836; --lemon:#FFD866; --lemon-soft:#3A3322;
+  --lilac:#A897FF; --lilac-soft:#2C2752; --ink-strong:#FFFFFF; --good:#5ED6A0; --bad:#FF8A80; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--f-body)}
+.wrap{max-width:880px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left,0px));padding-right:max(16px, env(safe-area-inset-right,0px));padding-block:0 64px}
+h1,h2,h3{font-family:var(--f-display);color:var(--ink-strong);text-wrap:balance;line-height:1.15;margin:0}
+h2{font-size:clamp(1.5rem,4vw,2rem);font-weight:600}
+h3{font-size:1.15rem;font-weight:600}
+p{margin:0}
+a{color:var(--lilac)}
+.mono{font-family:var(--f-mono)}
+.num{font-variant-numeric:tabular-nums}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:28px;align-items:center;padding-block:36px 28px}
+.eyebrow{font:600 .78rem/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.hero h1{font-size:clamp(2.3rem,7vw,3.6rem);font-weight:700;margin-top:10px}
+.hero h1 span{color:var(--pink)}
+.hero p.lead{margin-top:14px;color:var(--muted);max-width:46ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{font:600 .8rem/1 var(--f-body);padding:8px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+.chip b{font-family:var(--f-mono)}
+.toys{position:relative;aspect-ratio:1/1;max-width:100%}
+.toys canvas{width:100%;height:100%;display:block}
+
+/* Nav */
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:calc(-1 * max(16px, env(safe-area-inset-left,0px)));padding:10px max(16px, env(safe-area-inset-left,0px));overflow-x:auto;white-space:nowrap}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+nav.toc a{display:inline-block;font:600 .85rem/1 var(--f-body);color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:999px}
+nav.toc a:hover,nav.toc a:focus-visible{background:var(--lilac-soft);color:var(--ink-strong);outline:none}
+
+section{padding-top:44px;display:grid;gap:18px;scroll-margin-top:70px}
+.sec-head{display:flex;gap:14px;align-items:center}
+.sec-head>div{min-width:0}
+.sec-head .kicker{overflow-wrap:anywhere}
+.badge{flex:none;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font:700 1.2rem/1 var(--f-display);color:#fff}
+.b1{background:var(--lilac)} .b2{background:var(--pink)} .b3{background:var(--mint)} .b4{background:var(--lemon);color:#3a2d00}
+.kicker{color:var(--muted);font-size:.95rem}
+
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;display:grid;gap:8px;min-width:0}
+.card p,.card li{color:var(--ink)}
+.card ul,.card ol{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.quote{font-family:var(--f-display);font-size:1.25rem;font-weight:500;color:var(--ink-strong);background:var(--lilac-soft);border-radius:18px;padding:18px 20px}
+
+/* Estructura MOA */
+.parts{display:grid;gap:8px;counter-reset:p}
+.part{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.part .n{font:700 1.1rem/38px var(--f-display);text-align:center;border-radius:12px;background:var(--lilac-soft);color:var(--lilac)}
+.part small{color:var(--muted);display:block}
+.formato{display:flex;flex-wrap:wrap;gap:6px}
+.formato span{font:600 .82rem/1 var(--f-mono);padding:8px 10px;border-radius:10px;background:var(--lemon-soft);color:var(--ink-strong)}
+
+/* Actores */
+.actors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.tag{display:inline-block;font:600 .8rem/1 var(--f-body);padding:7px 10px;border-radius:999px;margin:3px 4px 3px 0}
+.t-gov{background:var(--lilac-soft);color:var(--ink-strong)} .t-priv{background:var(--pink-soft);color:var(--ink-strong)} .t-oth{background:var(--lemon-soft);color:var(--ink-strong)}
+
+/* Caso */
+.case{background:linear-gradient(135deg,var(--pink-soft),var(--lilac-soft));border-radius:22px;padding:22px;display:grid;gap:10px}
+.case h3{font-size:1.4rem}
+
+/* Clasificador */
+.classify{display:grid;gap:14px}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:8px}
+legend{font-weight:600;margin-bottom:6px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts label{cursor:pointer;display:flex;gap:8px;align-items:center;padding:10px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);font-weight:500}
+.opts input{accent-color:var(--pink)}
+.opts label:has(input:checked){border-color:var(--pink);background:var(--pink-soft)}
+.result{border-radius:18px;padding:18px;background:var(--mint-soft);display:grid;gap:6px}
+.result .code{font:700 clamp(1.6rem,5vw,2.2rem)/1 var(--f-mono);color:var(--ink-strong)}
+.ladder{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.9rem;color:var(--muted)}
+.ladder b{font-family:var(--f-mono);color:var(--ink-strong);background:var(--surface);padding:4px 8px;border-radius:8px;border:1px solid var(--line)}
+
+/* Calculadora */
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:16px;align-items:start}
+.field{display:grid;gap:6px}
+.field label{font-weight:600}
+.field input{font:600 1.2rem var(--f-mono);padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink-strong);width:100%}
+.field input:focus-visible{outline:3px solid var(--lilac);outline-offset:1px}
+.hint{font-size:.85rem;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+td,th{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left}
+td.r,th.r{text-align:right;font-family:var(--f-mono)}
+tr.total td{font-weight:700;color:var(--ink-strong);border-bottom:0;background:var(--lemon-soft)}
+tr.total td:first-child{border-radius:12px 0 0 12px} tr.total td:last-child{border-radius:0 12px 12px 0}
+.bar{display:flex;height:14px;border-radius:999px;overflow:hidden;gap:2px;background:var(--line)}
+.bar i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.82rem;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:var(--c)}
+
+/* Documentos */
+.docs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.doc{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);cursor:pointer}
+.doc input{margin-top:4px;accent-color:var(--mint);width:18px;height:18px;flex:none}
+.doc:has(input:checked){background:var(--mint-soft);border-color:var(--mint)}
+.doc small{display:block;color:var(--muted)}
+.nope{display:flex;flex-wrap:wrap;gap:8px}
+.nope span{font-size:.85rem;padding:8px 12px;border-radius:999px;background:var(--surface);border:1px dashed var(--line);color:var(--muted)}
+.nope span b{color:var(--bad)}
+.progress{font:600 .9rem var(--f-body);color:var(--muted)}
+
+/* Flujo */
+.flow{display:grid;gap:0;counter-reset:s}
+.step{display:grid;grid-template-columns:44px 1fr;gap:14px;position:relative;padding-bottom:16px}
+.step::before{counter-increment:s;content:counter(s);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font:700 1.05rem var(--f-display);background:var(--surface);border:2px solid var(--pink);color:var(--ink-strong);z-index:1}
+.step:not(:last-child)::after{content:"";position:absolute;left:21px;top:44px;bottom:0;width:2px;background:var(--line)}
+.step div{padding-top:8px}
+.step small{color:var(--muted)}
+.fork{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.fork span{padding:10px 12px;border-radius:12px;font-size:.9rem}
+.green{background:var(--mint-soft)} .red{background:var(--pink-soft)}
+
+/* Riesgos */
+.risks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.risk{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--sev);border-radius:14px;padding:14px;display:grid;gap:4px}
+.risk .lvl{font:600 .72rem/1 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--sev)}
+
+/* Propuesta */
+.prop{display:grid;gap:10px}
+.prop .card{grid-template-columns:auto 1fr;align-items:start;column-gap:14px}
+.prop .ic{width:36px;height:36px;border-radius:10px;background:var(--mint-soft);display:grid;place-items:center;font:700 .95rem var(--f-display);color:var(--ink-strong)}
+
+/* Preguntas */
+details{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:4px 18px}
+details+details{margin-top:10px}
+summary{cursor:pointer;list-style:none;font:600 1.05rem/1.35 var(--f-display);color:var(--ink-strong);padding:14px 0;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:1.4rem;line-height:1;color:var(--pink)}
+details[open] summary::after{content:"–"}
+details p{padding-bottom:16px}
+summary:focus-visible{outline:3px solid var(--lilac);outline-offset:4px;border-radius:8px}
+
+footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);font-size:.88rem;color:var(--muted);display:grid;gap:8px}
+footer ul{margin:0;padding-left:1.1em;display:grid;gap:4px}
+
+
+/* Evidencia */
+.evs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+figure.ev{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:grid;grid-template-rows:auto 1fr;scroll-margin-top:70px}
+figure.ev a.shot{display:block;background:#fff;border-bottom:1px solid var(--line)}
+figure.ev img{display:block;width:100%;height:auto}
+figure.ev figcaption{padding:12px 14px;display:grid;gap:6px;font-size:.9rem}
+figure.ev figcaption b{color:var(--ink-strong)}
+.src{display:inline-flex;gap:6px;align-items:center;font:600 .82rem/1.3 var(--f-body);color:var(--lilac);text-decoration:none}
+.src:hover{text-decoration:underline}
+.proof{font:600 .82rem var(--f-body);color:var(--lilac);text-decoration:none;border-bottom:1px dashed currentColor}
+.seal{display:flex;gap:10px;align-items:center;background:var(--mint-soft);border-radius:14px;padding:12px 14px;font-size:.92rem}
+.seal b{color:var(--ink-strong)}
+@media (max-width:680px){.evs{grid-template-columns:1fr}}
+@media (max-width:680px){
+  .hero{grid-template-columns:1fr}
+  .toys{max-width:260px;justify-self:center;order:-1}
+  .grid2,.actors,.docs,.risks,.calc{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <div class="eyebrow">Derecho Aduanero · UVM · Ejercicio en equipo</div>
+      <h1>Squishies <span>desde China</span></h1>
+      <p class="lead">Cómo usaría el Manual de Operación Aduanera (MOA) una empresa mexicana que quiere importar juguetes de espuma desde China: clasificación, impuestos, documentos, despacho, riesgos y una propuesta para hacerlo más rápido.</p>
+      <div class="chips">
+        <span class="chip">Fracción <b>9503.00.93</b></span>
+        <span class="chip">IGI <b>30 %</b></span>
+        <span class="chip">IVA <b>16 %</b></span>
+        <span class="chip">Régimen <b>A1</b></span>
+      </div>
+    </div>
+    <div class="toys" aria-hidden="true"><canvas id="toys" width="400" height="400"></canvas></div>
+  </header>
+
+  <nav class="toc" aria-label="Secciones">
+    <a href="#moa">1 · MOA</a><a href="#caso">El caso</a><a href="#clasificacion">Clasificación</a><a href="#contribuciones">Contribuciones</a><a href="#documentos">Documentos</a><a href="#despacho">Despacho</a><a href="#riesgos">Riesgos</a><a href="#propuesta">3 · Propuesta</a><a href="#preguntas">Preguntas</a><a href="#evidencia">Evidencia oficial</a>
+  </nav>
+
+  <!-- 1. MOA -->
+  <section id="moa">
+    <div class="sec-head"><span class="badge b1">1</span><div><h2>Revisar el manual (MOA)</h2><p class="kicker">Concepto, finalidad, estructura, procedimientos y actores</p></div></div>
+    <p class="quote">La Ley Aduanera dice qué se debe hacer; el MOA dice cómo se hace y quién lo hace.</p>
+    <p><a class="proof" href="#ev-anam">Ver captura de la página oficial de la ANAM</a> · <a class="proof" href="#ev-estructura">ver la estructura en el manual</a> · <a class="proof" href="#ev-formato">ver el formato de un proceso</a></p>
+    <div class="grid2">
+      <div class="card"><h3>Concepto</h3><p>Manual que publica la Agencia Nacional de Aduanas de México (ANAM) y que describe paso a paso los procesos de la operación aduanera. La versión vigente es de mayo de 2022 y se aplica por el artículo Octavo Transitorio del decreto que expidió el Reglamento Interior de la ANAM (DOF 21-12-2021). La ANAM informa que está en proceso de actualización.</p></div>
+      <div class="card"><h3>Finalidad</h3><ul><li>Que todas las aduanas operen igual.</li><li>Dar certeza al usuario sobre qué va a pasar.</li><li>Reducir la discrecionalidad del personal.</li><li>Que cada actor sepa exactamente qué le toca.</li></ul></div>
+    </div>
+    <h3>Estructura del manual</h3>
+    <div class="parts">
+      <div class="part"><span class="n">1</span><div><b>Actuaciones previas al despacho</b><small>Consultas de clasificación arancelaria, desistimientos de régimen, servicios extraordinarios</small></div></div>
+      <div class="part"><span class="n">2</span><div><b>Despacho aduanero</b><small>Por tipo de aduana: fronteriza, interior y marítima. Modulación, reconocimiento, pasajeros, tránsitos, vía postal</small></div></div>
+      <div class="part"><span class="n">3</span><div><b>Inspección, control y gestión de usuarios externos</b><small>Rayos X y gamma, muestreo, órdenes de verificación</small></div></div>
+      <div class="part"><span class="n">4</span><div><b>Actos y procedimientos legales</b><small>PAMA, contrabando, divisas no declaradas, puesta a disposición del Ministerio Público</small></div></div>
+      <div class="part"><span class="n">5</span><div><b>Compilación de beneficios que se otorgan en la operación</b></div></div>
+    </div>
+    <div class="card"><h3>Cada proceso tiene el mismo formato</h3><div class="formato"><span>I. Objetivo</span><span>II. Alcance</span><span>III. Normatividad</span><span>IV. Glosario</span><span>V. Diagrama de flujo</span><span>VI. Detalle del proceso</span></div></div>
+    <div class="grid2">
+      <div class="card"><h3>Procedimientos más utilizados</h3><ul><li>Modulación del documento aduanero (semáforo)</li><li>Reconocimiento aduanero</li><li>Revisión no intrusiva con rayos X y gamma</li><li>Despacho de pasajeros</li><li>Consultas sobre clasificación arancelaria</li><li>Muestreo de mercancías</li><li>PAMA cuando hay irregularidades</li></ul><p class="hint">El manual no los ordena por frecuencia; esta lista es una lectura del equipo.</p></div>
+      <div class="card"><h3>Actores involucrados</h3>
+        <div><span class="tag t-gov">Administrador de la aduana</span><span class="tag t-gov">Operador y supervisor de módulos</span><span class="tag t-gov">Verificador</span><span class="tag t-gov">Unidad técnica de asesoría y muestreo</span><span class="tag t-gov">Área legal</span><span class="tag t-gov">Personal administrativo</span></div>
+        <div><span class="tag t-priv">Agente aduanal</span><span class="tag t-priv">Importador o exportador</span><span class="tag t-priv">Transportista</span><span class="tag t-priv">Pasajeros</span><span class="tag t-priv">Banco</span></div>
+        <div><span class="tag t-oth">Ministerio Público</span></div>
+        <p class="hint">Morado: aduana · Rosa: sector privado · Amarillo: otras autoridades</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Caso -->
+  <section id="caso">
+    <div class="case">
+      <div class="eyebrow">2 · Identifica · El ejercicio</div>
+      <h3>Una empresa mexicana quiere importar squishies desde China</h3>
+      <p>Los squishies son juguetes antiestrés de espuma de poliuretano, suaves y que recuperan su forma. Se venden con forma de animales, personajes o comida. El profe pidió no fijarse en nombres de empresas ni puertos, sino en el ejercicio real; en el MOA aplican los procesos de despacho a la importación en aduana marítima.</p>
+    </div>
+  </section>
+
+  <!-- Clasificación -->
+  <section id="clasificacion">
+    <div class="sec-head"><span class="badge b2">A</span><div><h2>Clasificación arancelaria</h2><p class="kicker">Prueba con el tipo de squishy que van a traer</p></div></div>
+    <div class="ladder"><span>Capítulo</span><b>95</b><span>→ Partida</span><b>95.03</b><span>→ Subpartida</span><b>9503.00</b><span>→ Fracción</span><b id="ladder-f">9503.00.93</b></div>
+    <form class="classify card" id="cls" onsubmit="return false">
+      <fieldset><legend>¿Qué forma tiene el squishy?</legend><div class="opts">
+        <label><input type="radio" name="forma" id="f-animal" value="animal" checked> Animal o personaje</label>
+        <label><input type="radio" name="forma" id="f-comida" value="comida"> Comida u objeto</label>
+      </div></fieldset>
+      <fieldset><legend>¿Para qué edad es?</legend><div class="opts">
+        <label><input type="radio" name="edad" id="e-mas" value="mas" checked> Mayores de 3 años</label>
+        <label><input type="radio" name="edad" id="e-bebe" value="bebe"> Hasta 36 meses</label>
+      </div></fieldset>
+      <div class="result" aria-live="polite">
+        <div class="eyebrow">Fracción arancelaria</div>
+        <div class="code" id="r-code">9503.00.93</div>
+        <p id="r-desc">Los demás juguetes que representen animales o seres no humanos, sin rellenar.</p>
+        <p class="hint" id="r-why">No es «relleno» (9503.00.12 es para peluches): el squishy es espuma sólida.</p>
+      </div>
+    </form>
+    <p class="hint">Todas estas fracciones pagan IGI de 30 % desde el decreto DOF 29-12-2025 (antes 15 %). <a class="proof" href="#ev-ligie">Ver captura de la LIGIE oficial</a></p>
+  </section>
+
+  <!-- Contribuciones -->
+  <section id="contribuciones">
+    <div class="sec-head"><span class="badge b3">B</span><div><h2>Contribuciones aplicables</h2><p class="kicker">China no tiene tratado de libre comercio con México: paga la tasa completa</p></div></div>
+    <div class="calc">
+      <div class="card">
+        <div class="field"><label for="valor">Valor en aduana (MXN)</label><input id="valor" type="text" inputmode="numeric" value="100,000" autocomplete="off"></div>
+        <p class="hint">Precio pagado más flete y seguro hasta el puerto mexicano (arts. 64 y 65 de la Ley Aduanera). El ejemplo usa $100,000.</p>
+        <div class="bar" id="bar" aria-hidden="true"></div>
+        <div class="legend"><span style="--c:var(--pink)">IGI</span><span style="--c:var(--lemon)">DTA</span><span style="--c:var(--lilac)">IVA</span></div>
+      </div>
+      <div class="card" style="padding:8px 8px 12px;overflow-x:auto">
+        <table aria-label="Cálculo de contribuciones">
+          <thead><tr><th>Concepto</th><th>Tasa</th><th class="r">Importe</th></tr></thead>
+          <tbody>
+            <tr><td>IGI</td><td>30 %</td><td class="r" id="c-igi"></td></tr>
+            <tr><td>DTA</td><td>8 al millar</td><td class="r" id="c-dta"></td></tr>
+            <tr><td>IVA <small class="hint">sobre valor + IGI + DTA</small></td><td>16 %</td><td class="r" id="c-iva"></td></tr>
+            <tr class="total"><td>Total a pagar</td><td></td><td class="r" id="c-tot"></td></tr>
+          </tbody>
+        </table>
+        <p class="hint" style="padding:8px 12px 0" id="c-pct"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Documentos -->
+  <section id="documentos">
+    <div class="sec-head"><span class="badge b4">C</span><div><h2>Documentación requerida</h2><p class="progress" id="doc-prog">0 de 8 listos</p></div></div>
+    <div class="docs" id="docs">
+      <label class="doc"><input type="checkbox" id="d1"><div><b>Pedimento A1</b><small>Importación definitiva, firmado con e.firma del agente</small></div></label>
+      <label class="doc"><input type="checkbox" id="d2"><div><b>Factura y COVE</b><small>El valor de la compra, transmitido en la VUCEM</small></div></label>
+      <label class="doc"><input type="checkbox" id="d3"><div><b>Manifestación de valor (E2)</b><small>Por cada operación, en la Ventanilla Digital</small></div></label>
+      <label class="doc"><input type="checkbox" id="d4"><div><b>Conocimiento de embarque</b><small>Documento de transporte marítimo desde China</small></div></label>
+      <label class="doc"><input type="checkbox" id="d5"><div><b>NOM-015-SCFI-2007</b><small>Etiquetado de juguetes en español: advertencias y edad</small></div></label>
+      <label class="doc"><input type="checkbox" id="d6"><div><b>NOM-252-SSA1-2011</b><small>Límites de metales como el plomo en juguetes</small></div></label>
+      <label class="doc"><input type="checkbox" id="d7"><div><b>Encargo conferido</b><small>Autorización al agente aduanal en el Portal del SAT</small></div></label>
+      <label class="doc"><input type="checkbox" id="d8"><div><b>Padrón de Importadores</b><small>General; los juguetes no están en el Anexo 10</small></div></label>
+    </div>
+    <p class="hint"><a class="proof" href="#ev-nom015">Ver NOM-015 en el DOF</a> · <a class="proof" href="#ev-nom252">ver NOM-252 en el DOF</a></p>
+    <div class="nope"><span><b>No aplica:</b> certificado de origen (no hay preferencia con China)</span><span><b>No aplica:</b> Padrón de Sectores Específicos</span></div>
+  </section>
+
+  <!-- Despacho -->
+  <section id="despacho">
+    <div class="sec-head"><span class="badge b2">D</span><div><h2>Procedimiento de despacho aduanero</h2><p class="kicker">Procesos del MOA para aduana marítima</p></div></div>
+    <div class="flow">
+      <div class="step"><div><b>Compra y embarque en China</b><br><small>Factura del proveedor y conocimiento de embarque</small></div></div>
+      <div class="step"><div><b>Arribo y depósito en recinto fiscalizado</b><br><small>Art. 23 de la Ley Aduanera</small></div></div>
+      <div class="step"><div><b>Previo y clasificación por el agente aduanal</b><br><small>Revisa fracción, etiquetas NOM-015 y documentos</small></div></div>
+      <div class="step"><div><b>Trámites en la VUCEM</b><br><small>COVE y manifestación de valor E2</small></div></div>
+      <div class="step"><div><b>Pedimento A1</b><br><small>Se elabora, valida y firma (art. 36)</small></div></div>
+      <div class="step"><div><b>Pago de IGI, DTA e IVA</b><br><small>Antes de activar el semáforo (art. 83)</small></div></div>
+      <div class="step"><div><b>Modulación: mecanismo de selección automatizado</b><br><small>Art. 43 · proceso de modulación del MOA</small>
+        <div class="fork"><span class="green"><b>Verde:</b> desaduanamiento libre</span><span class="red"><b>Rojo:</b> reconocimiento aduanero; si hay irregularidad, acta y PAMA</span></div></div></div>
+      <div class="step"><div><b>Salida y expediente electrónico</b><br><small>Se conservan pedimento, anexos y acuses</small></div></div>
+    </div>
+  </section>
+
+  <!-- Riesgos -->
+  <section id="riesgos">
+    <div class="sec-head"><span class="badge b3">E</span><div><h2>Posibles riesgos operativos</h2></div></div>
+    <div class="risks">
+      <div class="risk" style="--sev:var(--bad)"><span class="lvl">Alto</span><b>Subvaluación</b><p>Declarar un precio muy bajo. Desde el 1 de enero de 2027 puede llevar a embargo precautorio (decreto DOF 23-10-2026).</p></div>
+      <div class="risk" style="--sev:var(--bad)"><span class="lvl">Alto</span><b>Incumplir las NOM</b><p>Etiqueta sin advertencias o plomo fuera de la NOM-252: la mercancía no se libera.</p></div>
+      <div class="risk" style="--sev:var(--lemon)"><span class="lvl">Medio</span><b>Mala clasificación</b><p>Declararlo como peluche relleno o como juguete para bebés cambia la fracción y la NOM.</p></div>
+      <div class="risk" style="--sev:var(--lemon)"><span class="lvl">Medio</span><b>Personajes con marca</b><p>Squishies de personajes famosos sin licencia pueden considerarse piratería.</p></div>
+      <div class="risk" style="--sev:var(--lilac)"><span class="lvl">Revisar</span><b>Cuotas compensatorias</b><p>Hay que confirmar si la fracción tiene cuota compensatoria para China antes de comprar.</p></div>
+      <div class="risk" style="--sev:var(--lilac)"><span class="lvl">Operativo</span><b>Retrasos y almacenaje</b><p>Semáforo rojo o documentos incompletos alargan la estancia en el recinto.</p></div>
+    </div>
+  </section>
+
+  <!-- Propuesta -->
+  <section id="propuesta">
+    <div class="sec-head"><span class="badge b4">3</span><div><h2>Propuesta para agilizar el proceso</h2></div></div>
+    <div class="prop">
+      <div class="card"><span class="ic">1</span><div><b>Etiquetar y probar en origen.</b> Pedir al proveedor chino la etiqueta NOM-015 y las pruebas de laboratorio de la NOM-252 antes de embarcar.</div></div>
+      <div class="card"><span class="ic">2</span><div><b>Clasificar antes de comprar.</b> Definir la fracción con el agente y, si hay duda, presentar una consulta de clasificación (proceso del MOA, parte 1).</div></div>
+      <div class="card"><span class="ic">3</span><div><b>Transmitir todo antes del arribo.</b> COVE y manifestación de valor listos cuando llegue el barco, con el valor real.</div></div>
+      <div class="card"><span class="ic">4</span><div><b>Un agente con experiencia en juguetes</b> y un checklist fijo de documentos por embarque.</div></div>
+      <div class="card"><span class="ic">5</span><div><b>A largo plazo, certificación OEA</b> (Operador Económico Autorizado), para operar como empresa confiable ante la aduana.</div></div>
+    </div>
+  </section>
+
+  <!-- Preguntas -->
+  <section id="preguntas">
+    <div class="sec-head"><span class="badge b1">?</span><div><h2>Preguntas del pizarrón</h2></div></div>
+    <div>
+      <details open><summary>¿Cuál es la importancia de la correcta clasificación arancelaria?</summary><p>La fracción decide el arancel (30 % en juguetes), qué NOM aplican y el IVA. Una fracción mal puesta hace que se pague de más o de menos, genera multas y puede detener la mercancía. Además, el agente aduanal responde por la clasificación (art. 54 de la Ley Aduanera).</p></details>
+      <details><summary>¿Cómo impacta el cumplimiento aduanero en la competitividad de la empresa?</summary><p>Con el IGI en 30 %, importar juguetes chinos se encareció. La empresa que cumple bien conoce su costo real, despacha rápido, evita multas y almacenaje, y puede competir en precio y en tiempo de entrega. Cumplir también abre la puerta a certificaciones como el OEA.</p></details>
+      <details><summary>¿Qué riesgos surgen con una gestión incorrecta?</summary><p>Económicos (multas y diferencias de impuestos), operativos (mercancía detenida, retrasos), legales (PAMA, embargo, suspensión del padrón y, en casos graves, contrabando o piratería) y de reputación ante clientes y autoridades.</p></details>
+    </div>
+  </section>
+
+
+  <!-- Evidencia -->
+  <section id="evidencia">
+    <div class="sec-head"><span class="badge b3">✓</span><div><h2>Evidencia oficial</h2><p class="kicker">Capturas tomadas el 25 de noviembre de 2026 de las páginas oficiales. Toca cualquier imagen para abrir la fuente.</p></div></div>
+    <div class="seal"><span>Todas las fuentes son de dominios del gobierno de México: <b>diputados.gob.mx</b>, <b>anam.gob.mx</b>, <b>dof.gob.mx</b> y <b>sat.gob.mx</b>.</span></div>
+    <div class="evs">
+      <figure class="ev" id="ev-ligie"><a class="shot" href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LIGIE_2022.pdf#page=818" target="_blank" rel="noopener"><img src="evidencia/ligie-9503-93.jpg" alt="Captura de la LIGIE, página 818: fracciones 9503.00.93 y 9503.00.99 con impuesto de importación de 30 y nota Fracción reformada DOF 29-12-2025, antes 15"></a>
+        <figcaption><b>LIGIE, página 818: 9503.00.93 y 9503.00.99 pagan 30 %</b><span>Cada fracción dice «Fracción reformada DOF 29-12-2025 (antes Imp. 15)».</span><a class="src" href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LIGIE_2022.pdf#page=818" target="_blank" rel="noopener">Abrir en diputados.gob.mx ↗</a></figcaption></figure>
+      <figure class="ev" id="ev-columnas"><a class="shot" href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LIGIE_2022.pdf#page=815" target="_blank" rel="noopener"><img src="evidencia/ligie-columnas.jpg" alt="Captura de la LIGIE, página 815: encabezado de la tarifa con columnas impuesto de importación y de exportación y la partida 95.03"></a>
+        <figcaption><b>LIGIE, página 815: partida 95.03 y columnas de la tarifa</b><span>El 30 aparece en la columna «Impuesto de importación».</span><a class="src" href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LIGIE_2022.pdf#page=815" target="_blank" rel="noopener">Abrir en diputados.gob.mx ↗</a></figcaption></figure>
+      <figure class="ev" id="ev-anam"><a class="shot" href="https://www.anam.gob.mx/moa/" target="_blank" rel="noopener"><img src="evidencia/anam-moa.jpg" alt="Captura de la página del MOA en anam.gob.mx con el texto sobre el artículo Octavo Transitorio y el proceso de actualización"></a>
+        <figcaption><b>ANAM: fundamento del MOA</b><span>Artículo Octavo Transitorio del decreto del DOF del 21 de diciembre de 2021; el manual está en actualización.</span><a class="src" href="https://www.anam.gob.mx/moa/" target="_blank" rel="noopener">Abrir en anam.gob.mx ↗</a></figcaption></figure>
+      <figure class="ev" id="ev-estructura"><a class="shot" href="https://www.anam.gob.mx/wp-content/uploads/2022/05/Manual-de-Operacion-Aduanera-MOA-may2022.pdf#page=1" target="_blank" rel="noopener"><img src="evidencia/moa-estructura.jpg" alt="Captura de la página 1 del Manual de Operación Aduanera con sus cinco partes"></a>
+        <figcaption><b>MOA, página 1: las 5 partes del manual</b><span>Versión de mayo de 2022, publicada por la ANAM.</span><a class="src" href="https://www.anam.gob.mx/wp-content/uploads/2022/05/Manual-de-Operacion-Aduanera-MOA-may2022.pdf#page=1" target="_blank" rel="noopener">Abrir el PDF oficial ↗</a></figcaption></figure>
+      <figure class="ev" id="ev-formato"><a class="shot" href="https://www.anam.gob.mx/wp-content/uploads/2022/05/Manual-de-Operacion-Aduanera-MOA-may2022.pdf#page=6" target="_blank" rel="noopener"><img src="evidencia/moa-formato.jpg" alt="Captura de la página 6 del MOA: proceso Consultas sobre clasificación arancelaria con objetivo, alcance, normatividad y glosario"></a>
+        <figcaption><b>MOA, página 6: formato de un proceso y sus actores</b><span>Consultas sobre clasificación arancelaria: el alcance nombra al agente aduanal, el administrador, el verificador y el área legal.</span><a class="src" href="https://www.anam.gob.mx/wp-content/uploads/2022/05/Manual-de-Operacion-Aduanera-MOA-may2022.pdf#page=6" target="_blank" rel="noopener">Abrir el PDF oficial ↗</a></figcaption></figure>
+      <figure class="ev" id="ev-nom015"><a class="shot" href="https://dof.gob.mx/nota_detalle.php?codigo=5033112&amp;fecha=17/04/2008" target="_blank" rel="noopener"><img src="evidencia/dof-nom015.jpg" alt="Captura del DOF del 17 de abril de 2008: NOM-015-SCFI-2007, Información comercial, etiquetado para juguetes"></a>
+        <figcaption><b>DOF, 17-04-2008: NOM-015-SCFI-2007</b><span>Información comercial, etiquetado para juguetes.</span><a class="src" href="https://dof.gob.mx/nota_detalle.php?codigo=5033112&amp;fecha=17/04/2008" target="_blank" rel="noopener">Abrir en dof.gob.mx ↗</a></figcaption></figure>
+      <figure class="ev" id="ev-nom252"><a class="shot" href="https://dof.gob.mx/normasOficiales/4704/salud/salud.htm" target="_blank" rel="noopener"><img src="evidencia/dof-nom252.jpg" alt="Captura del DOF: NOM-252-SSA1-2011, juguetes y artículos escolares, límites de biodisponibilidad de metales pesados"></a>
+        <figcaption><b>DOF: NOM-252-SSA1-2011</b><span>Juguetes y artículos escolares: límites de metales pesados.</span><a class="src" href="https://dof.gob.mx/normasOficiales/4704/salud/salud.htm" target="_blank" rel="noopener">Abrir en dof.gob.mx ↗</a></figcaption></figure>
+      <figure class="ev" id="ev-anexo10"><div style="padding:18px;display:grid;gap:8px"><b>Anexo 10 de las RGCE 2026 (SAT)</b><span>Lista de mercancías que necesitan Padrón de Sectores Específicos. Buscamos la partida 95.03 y la palabra «juguete»: no aparecen, por eso basta el Padrón de Importadores general.</span><a class="src" href="https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rgce/anexos/Anexo10delasRGCEpara2026.pdf" target="_blank" rel="noopener">Abrir en sat.gob.mx ↗</a></div></figure>
+    </div>
+  </section>
+
+  <footer>
+    <b>Fuentes consultadas el 25 de noviembre de 2026</b>
+    <ul>
+      <li><a href="https://www.anam.gob.mx/moa/" target="_blank" rel="noopener">Manual de Operación Aduanera, ANAM</a> (versión de mayo de 2022)</li>
+      <li><a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LIGIE_2022.pdf" target="_blank" rel="noopener">LIGIE vigente, Cámara de Diputados</a>, capítulo 95 (reforma DOF 29-12-2025)</li>
+      <li><a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LAdua.pdf" target="_blank" rel="noopener">Ley Aduanera, Cámara de Diputados</a></li>
+      <li><a href="https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rgce/anexos/Anexo10delasRGCEpara2026.pdf" target="_blank" rel="noopener">Anexo 10 de las RGCE 2026, SAT</a></li>
+      <li><a href="https://dof.gob.mx/nota_detalle.php?codigo=5033112&fecha=17%2F04%2F2008" target="_blank" rel="noopener">NOM-015-SCFI-2007, DOF</a> · <a href="https://dof.gob.mx/normasOficiales/4704/salud/salud.htm" target="_blank" rel="noopener">NOM-252-SSA1-2011, DOF</a></li>
+    </ul>
+    <p>Hecho por David Callejas para la clase de Derecho Aduanero, UVM. Los montos son un ejemplo.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  // ---- Clasificador ----
+  const F = {
+    animal: ['9503.00.93','Los demás juguetes que representen animales o seres no humanos, sin rellenar.','No es «relleno» (9503.00.12 es para peluches): el squishy es espuma sólida.'],
+    comida: ['9503.00.99','Los demás.','Un squishy con forma de comida u objeto no encaja en ninguna fracción específica, así que va en «Los demás».'],
+    bebe:   ['9503.00.24','Juguetes destinados a niños de hasta 36 meses de edad.','Si el juguete está hecho para bebés de hasta 36 meses, va en esta fracción específica.']
+  };
+  const form = document.getElementById('cls');
+  function upd(){
+    const forma = form.querySelector('input[name=forma]:checked').value;
+    const edad = form.querySelector('input[name=edad]:checked').value;
+    const r = edad === 'bebe' ? F.bebe : F[forma];
+    document.getElementById('r-code').textContent = r[0];
+    document.getElementById('ladder-f').textContent = r[0];
+    document.getElementById('r-desc').textContent = r[1];
+    document.getElementById('r-why').textContent = r[2];
+  }
+  form.addEventListener('change', upd); upd();
+
+  // ---- Calculadora ----
+  const fmt = n => '$' + Math.round(n).toLocaleString('es-MX');
+  const inp = document.getElementById('valor');
+  function calc(){
+    const v = Number(String(inp.value).replace(/[^\d.]/g,'')) || 0;
+    const igi = v*0.30, dta = v*0.008, iva = (v+igi+dta)*0.16, tot = igi+dta+iva;
+    document.getElementById('c-igi').textContent = fmt(igi);
+    document.getElementById('c-dta').textContent = fmt(dta);
+    document.getElementById('c-iva').textContent = fmt(iva);
+    document.getElementById('c-tot').textContent = fmt(tot);
+    document.getElementById('c-pct').textContent = v ? 'Las contribuciones equivalen al ' + (tot/v*100).toFixed(1) + ' % del valor en aduana.' : 'Escribe un valor para calcular.';
+    const bar = document.getElementById('bar'); bar.innerHTML='';
+    if (tot>0) [['--pink',igi],['--lemon',dta],['--lilac',iva]].forEach(([c,x])=>{const i=document.createElement('i');i.style.background='var('+c+')';i.style.width=(x/tot*100)+'%';bar.appendChild(i)});
+  }
+  inp.addEventListener('input', calc);
+  inp.addEventListener('blur', ()=>{const v=Number(String(inp.value).replace(/[^\d.]/g,''))||0; inp.value=v.toLocaleString('es-MX')});
+  calc();
+
+  // ---- Checklist ----
+  const boxes = [...document.querySelectorAll('#docs input')];
+  const KEY='squishies-docs';
+  try{ const s=JSON.parse(localStorage.getItem(KEY)||'[]'); boxes.forEach(b=>{ if(s.includes(b.id)) b.checked=true }) }catch(e){}
+  function prog(){
+    const n = boxes.filter(b=>b.checked).length;
+    document.getElementById('doc-prog').textContent = n + ' de ' + boxes.length + ' listos';
+    try{ localStorage.setItem(KEY, JSON.stringify(boxes.filter(b=>b.checked).map(b=>b.id))) }catch(e){}
+  }
+  boxes.forEach(b=>b.addEventListener('change', prog)); prog();
+
+  // ---- Squishies dibujados ----
+  const cv = document.getElementById('toys'), ctx = cv.getContext('2d');
+  const css = getComputedStyle(document.documentElement);
+  const col = n => css.getPropertyValue(n).trim() || '#f47fa8';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const toys = [
+    {x:140,y:150,r:92,c:'--pink',k:'cat'},
+    {x:285,y:120,r:62,c:'--lemon',k:'bun'},
+    {x:270,y:285,r:78,c:'--mint',k:'frog'},
+    {x:115,y:300,r:52,c:'--lilac',k:'star'}
+  ];
+  function face(t,s){
+    const ink = col('--ink-strong');
+    ctx.fillStyle = '#2a2238';
+    const ey = t.y - t.r*0.08, ex = t.r*0.32;
+    ctx.beginPath(); ctx.arc(t.x-ex,ey,t.r*0.08,0,7); ctx.arc(t.x+ex,ey,t.r*0.08,0,7); ctx.fill();
+    ctx.strokeStyle='#2a2238'; ctx.lineWidth=Math.max(2,t.r*0.045); ctx.lineCap='round';
+    ctx.beginPath(); ctx.arc(t.x,ey+t.r*0.12,t.r*0.12,0.15*Math.PI,0.85*Math.PI); ctx.stroke();
+    ctx.fillStyle='rgba(255,120,150,.45)';
+    ctx.beginPath(); ctx.ellipse(t.x-ex*1.45,ey+t.r*0.18,t.r*0.12,t.r*0.07,0,0,7); ctx.ellipse(t.x+ex*1.45,ey+t.r*0.18,t.r*0.12,t.r*0.07,0,0,7); ctx.fill();
+  }
+  function draw(time){
+    ctx.clearRect(0,0,400,400);
+    toys.forEach((t,i)=>{
+      const s = reduce ? 0 : Math.sin(time/700 + i*1.7);
+      const sx = 1 + s*0.04, sy = 1 - s*0.04;
+      ctx.save(); ctx.translate(t.x,t.y); ctx.scale(sx,sy); ctx.translate(-t.x,-t.y);
+      ctx.fillStyle = col(t.c);
+      ctx.beginPath();
+      if (t.k==='cat'){ ctx.moveTo(t.x-t.r*0.75,t.y-t.r*0.45); ctx.lineTo(t.x-t.r*0.55,t.y-t.r*1.05); ctx.lineTo(t.x-t.r*0.15,t.y-t.r*0.8); ctx.lineTo(t.x+t.r*0.15,t.y-t.r*0.8); ctx.lineTo(t.x+t.r*0.55,t.y-t.r*1.05); ctx.lineTo(t.x+t.r*0.75,t.y-t.r*0.45); ctx.fill(); ctx.beginPath(); ctx.ellipse(t.x,t.y,t.r,t.r*0.85,0,0,7); }
+      else if (t.k==='bun'){ ctx.ellipse(t.x,t.y,t.r*1.1,t.r*0.8,0,Math.PI,0); ctx.lineTo(t.x+t.r*1.1,t.y+t.r*0.45); ctx.quadraticCurveTo(t.x,t.y+t.r*0.7,t.x-t.r*1.1,t.y+t.r*0.45); }
+      else if (t.k==='frog'){ ctx.ellipse(t.x,t.y+t.r*0.1,t.r,t.r*0.8,0,0,7); ctx.moveTo(t.x-t.r*0.35+t.r*0.3,t.y-t.r*0.6); ctx.arc(t.x-t.r*0.35,t.y-t.r*0.6,t.r*0.3,0,7); ctx.moveTo(t.x+t.r*0.35+t.r*0.3,t.y-t.r*0.6); ctx.arc(t.x+t.r*0.35,t.y-t.r*0.6,t.r*0.3,0,7); }
+      else { for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5, rr=k%2?t.r*0.55:t.r*1.1; ctx.lineTo(t.x+Math.cos(a)*rr,t.y+Math.sin(a)*rr)} ctx.closePath(); }
+      ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,.35)'; ctx.beginPath(); ctx.ellipse(t.x-t.r*0.4,t.y-t.r*0.35,t.r*0.22,t.r*0.12,-0.6,0,7); ctx.fill();
+      face(t,s);
+      ctx.restore();
+    });
+    if(!reduce) requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
